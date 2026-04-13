@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In - ConcernTracker PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            margin: 20px;
+        }
+
+        .auth-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .auth-header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+
+        .auth-content {
+            padding: 2rem;
+        }
+
+        .google-signin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #3c4043;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .google-signin-btn:hover {
+            background: #f8f9fa;
+            border-color: #dadce0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .google-signin-btn i {
+            font-size: 18px;
+            color: #4285f4;
+        }
+
+        .auth-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4285f4;
+        }
+
+        .auth-info h6 {
+            color: #4285f4;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .auth-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .auth-status.authenticated {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .auth-status.not-authenticated {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .loading-spinner .spinner-border {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1><i class="fas fa-shield-alt"></i> ConcernTracker</h1>
+            <p>Secure Email Authentication</p>
+        </div>
+        <div class="auth-content">
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 mb-0">Authenticating...</p>
+            </div>
+
+            <div id="authContent">
+                <a href="/auth/google" class="google-signin-btn" id="googleSignInBtn">
+                    <i class="fab fa-google"></i>
+                    <span>Sign in with Google</span>
+                </a>
+
+                <div class="auth-info">
+                    <h6><i class="fas fa-info-circle"></i> Why Google Sign-In?</h6>
+                    <p>Sign in once to enable automatic email notifications for all concern submissions. No passwords required!</p>
+                </div>
+
+                <div class="auth-status not-authenticated" id="authStatus">
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Not Authenticated</strong>
+                    <p class="mb-0 mt-1">Please sign in to enable email notifications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication status
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth/status');
+                const data = await response.json();
+                
+                updateAuthUI(data);
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        // Update UI based on authentication status
+        function updateAuthUI(authData) {
+            const authContent = document.getElementById('authContent');
+            const authStatus = document.getElementById('authStatus');
+            
+            if (authData.authenticated) {
+                // User is authenticated
+                authContent.innerHTML = `
+                    <div class="text-center mb-3">
+                        <img src="${authData.user.picture || 'https://picsum.photos/seed/user/80/80.jpg'}" 
+                             alt="Profile" class="rounded-circle" width="80" height="80">
+                        <h5 class="mt-2 mb-1">${authData.user.name}</h5>
+                        <p class="text-muted mb-0">${authData.user.email}</p>
+                    </div>
+                    
+                    <div class="auth-status authenticated">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Authenticated</strong>
+                        <p class="mb-0 mt-1">Email notifications are enabled</p>
+                    </div>
+                    
+                    <button class="btn btn-outline-danger w-100 mt-3" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                    
+                    <div class="mt-3">
+                        <a href="/" class="btn btn-primary w-100">
+                            <i class="fas fa-arrow-left"></i> Back to App
+                        </a>
+                    </div>
+                `;
+            } else {
+                // User is not authenticated
+                authStatus.className = 'auth-status not-authenticated';
+                authStatus.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Not Authenticated</strong>
+                    <p class="mb-0 mt-1">Please sign in to enable email notifications</p>
+                `;
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Reload page to update UI
+                    location.reload();
+                } else {
+                    alert('Logout failed');
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                alert('Logout failed');
+            }
+        }
+
+        // Check if user was redirected after successful authentication
+        const urlParams = new URLSearchParams(window.location.search);
+        const authSuccess = urlParams.get('auth');
+        const userEmail = urlParams.get('email');
+
+        if (authSuccess === 'success' && userEmail) {
+            // Show success message
+            const authContent = document.getElementById('authContent');
+            authContent.innerHTML = `
+                <div class="text-center">
+                    <div class="text-success mb-3">
+                        <i class="fas fa-check-circle fa-4x"></i>
+                    </div>
+                    <h5 class="text-success">Authentication Successful!</h5>
+                    <p class="text-muted">Email notifications are now enabled for:<br><strong>${userEmail}</strong></p>
+                    
+                    <div class="mt-3">
+                        <a href="/" class="btn btn-primary w-100">
+                            <i class="fas fa-arrow-left"></i> Go to App
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Normal auth check
+            checkAuthStatus();
+        }
+    </script>
+</body>
+</html>

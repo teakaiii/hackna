@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Concern - ConcernTracker PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #13B497 0%, #59D4A4 100%);
+            --warning-gradient: linear-gradient(135deg, #F59E0B 0%, #FCD34D 100%);
+            --danger-gradient: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .submit-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-body {
+            padding: 2.5rem;
+        }
+
+        .user-info-display {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .ai-assistant {
+            background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #a78bfa;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: #667eea;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .ai-suggestion {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #0c4a6e;
+            display: none;
+        }
+
+        .ai-suggestion.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .priority-indicator {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .priority-option {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .priority-option:hover {
+            transform: translateY(-2px);
+        }
+
+        .priority-option.selected {
+            border-color: currentColor;
+            color: white;
+        }
+
+        .priority-option.high {
+            background: var(--danger-gradient);
+            border-color: #ef4444;
+        }
+
+        .priority-option.medium {
+            background: var(--warning-gradient);
+            border-color: #f59e0b;
+        }
+
+        .priority-option.low {
+            background: var(--success-gradient);
+            border-color: #10b981;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f7fafc;
+        }
+
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background: #e9d8fd;
+        }
+
+        .anonymous-toggle {
+            background: #fef5e7;
+            border: 2px solid #f9e79f;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .btn-submit {
+            background: var(--success-gradient);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(19, 180, 151, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(19, 180, 151, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-indicator {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .progress-indicator.show {
+            display: block;
+        }
+
+        .ai-thinking {
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .tracking-preview {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .tracking-preview.show {
+            display: block;
+        }
+
+        .chat-interface {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chat-bubble {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-window.show {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-avatar-small {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .ai-status {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            max-width: 85%;
+        }
+
+        .message.ai-message {
+            align-self: flex-start;
+        }
+
+        .message.user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .message.user-message .message-avatar {
+            background: var(--secondary-gradient);
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-text {
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .message.user-message .message-text {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .ai-quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .btn-quick-action {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .btn-quick-action:hover {
+            border-color: #667eea;
+            background: #f0f9ff;
+            transform: translateY(-1px);
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-quick-reply {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e0;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-quick-reply:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .typing-indicator.show {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: none;
+        }
+
+        .notification-dot.show {
+            display: block;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="submit-card">
+            <!-- Form Header -->
+            <div class="form-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1><i class="fas fa-clipboard-list me-2"></i>Submit Your Concern</h1>
+                        <p>AI-powered categorization and priority detection</p>
+                    </div>
+                    <button class="btn btn-light btn-sm" onclick="logout()" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Body -->
+            <div class="form-body">
+                <!-- User Info Display -->
+                <div id="userInfoDisplay" class="user-info-display">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <strong>Submitting as:</strong> <span id="userEmail">Loading...</span>
+                            <span id="anonymousBadge" class="badge bg-secondary ms-2" style="display: none;">Anonymous</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="changeUser()">
+                            <i class="fas fa-exchange-alt"></i> Change
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label mb-1">Notification email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="notificationEmail" required
+                               placeholder="your.email@gmail.com or school email"
+                               autocomplete="email">
+                        <small class="text-muted">Tracking ID and admin replies are sent to this address.</small>
+                    </div>
+                </div>
+
+                <!-- AI Assistant -->
+                <div class="ai-assistant">
+                    <div class="ai-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h6>AI Assistant</h6>
+                    <p class="mb-2">I'll help you submit your concern quickly and accurately!</p>
+                    <div id="aiMessage" class="ai-message">
+                        <strong>Tip:</strong> Be specific about your issue. Include location, time, and what you've tried already. I'll automatically categorize and set priority for you!
+                    </div>
+                </div>
+
+                <form id="concernForm">
+                    <!-- Concern Details -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-edit"></i>
+                            Concern Details
+                        </h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Common Issues *</label>
+                            <select class="form-select" id="commonIssues" onchange="selectCommonIssue()">
+                                <option value="">-- Select a common issue --</option>
+                                <option value="wifi">📶 WiFi Connection Problems</option>
+                                <option value="computer">💻 Computer/Laptop Issues</option>
+                                <option value="login">🔐 Login/Password Problems</option>
+                                <option value="printing">🖨️ Printer Not Working</option>
+                                <option value="classroom">🏫 Classroom Equipment Issues</option>
+                                <option value="parking">🚗 Parking Problems</option>
+                                <option value="cafeteria">🍽️ Cafeteria/Food Issues</option>
+                                <option value="bathroom">🚽 Bathroom/Maintenance Issues</option>
+                                <option value="lighting">💡 Lighting Problems</option>
+                                <option value="ac">❄️ Air Conditioning/Heating</option>
+                                <option value="network">🌐 Network Connection Issues</option>
+                                <option value="software">⚙️ Software Installation Problems</option>
+                                <option value="email">📧 Email Access Issues</option>
+                                <option value="grade">📊 Grade/Transcript Issues</option>
+                                <option value="enrollment">📝 Enrollment/Registration Problems</option>
+                                <option value="financial">💰 Tuition/Payment Issues</option>
+                                <option value="scholarship">🎓 Scholarship/Finaid Questions</option>
+                                <option value="counseling">🧠 Counseling/Mental Health Support</option>
+                                <option value="safety">🛡️ Safety/Security Concerns</option>
+                                <option value="bullying">🚫 Bullying/Harassment</option>
+                                <option value="accessibility">♿ Accessibility Issues</option>
+                                <option value="library">📚 Library/Study Space Issues</option>
+                                <option value="sports">⚽ Sports/Facility Booking</option>
+                                <option value="transport">🚌 Transportation/Shuttle Issues</option>
+                                <option value="lost">🔍 Lost and Found</option>
+                                <option value="other">📋 Other (Please specify)</option>
+                            </select>
+                            <small class="text-muted">Select from common issues or choose "Other" to type your own</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Title *</label>
+                            <input type="text" class="form-control" id="concernTitle" required 
+                                   placeholder="Brief summary of your concern">
+                            <small class="text-muted">Be specific and concise</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description *</label>
+                            <textarea class="form-control" id="concernDescription" rows="5" required
+                                      placeholder="Provide detailed information about your concern..."></textarea>
+                            <small class="text-muted">Include location, time, and any relevant details</small>
+                        </div>
+                    </div>
+
+                    <!-- AI Analysis -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-brain"></i>
+                            AI Analysis
+                            <span class="ai-thinking ms-2" id="aiThinking" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Analyzing...
+                            </span>
+                        </h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Suggested Category</label>
+                                <select class="form-select" id="aiCategory">
+                                    <option value="">Let AI suggest...</option>
+                                    <option value="IT Support">IT Support</option>
+                                    <option value="Academic Affairs">Academic Affairs</option>
+                                    <option value="Facilities">Facilities</option>
+                                    <option value="Financial Aid">Financial Aid</option>
+                                    <option value="Student Welfare">Student Welfare</option>
+                                    <option value="Administrative">Administrative</option>
+                                </select>
+                                <div id="categorySuggestion" class="ai-suggestion">
+                                    <i class="fas fa-lightbulb"></i> <span id="categorySuggestionText"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Priority Level</label>
+                                <div class="priority-indicator">
+                                    <div class="priority-option low" data-priority="low" onclick="selectPriority('low')">
+                                        <i class="fas fa-arrow-down"></i>
+                                        <div>Low</div>
+                                        <small>Not urgent</small>
+                                    </div>
+                                    <div class="priority-option medium" data-priority="medium" onclick="selectPriority('medium')">
+                                        <i class="fas fa-minus"></i>
+                                        <div>Medium</div>
+                                        <small>Needs attention</small>
+                                    </div>
+                                    <div class="priority-option high" data-priority="high" onclick="selectPriority('high')">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <div>High</div>
+                                        <small>Urgent</small>
+                                    </div>
+                                </div>
+                                <div id="prioritySuggestion" class="ai-suggestion">
+                                    <i class="fas fa-exclamation-triangle"></i> <span id="prioritySuggestionText"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="form-section">
+                        <h6 class="section-title">
+                            <i class="fas fa-paperclip"></i>
+                            Attachments (Optional)
+                        </h6>
+                        
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <h6>Drop files here or click to browse</h6>
+                            <p class="text-muted">Support: PDF, DOC, DOCX, JPG, PNG (Max 10MB)</p>
+                            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">
+                        </div>
+                        
+                        <div id="fileList" class="mt-3"></div>
+                    </div>
+
+                    <!-- Anonymous Option -->
+                    <div class="anonymous-toggle">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="anonymousSubmit">
+                            <label class="form-check-label" for="anonymousSubmit">
+                                <strong>Submit Anonymously</strong>
+                            </label>
+                        </div>
+                        <p class="mb-0">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                            Your identity will be hidden from admins, but you'll still receive email updates about your concern.
+                        </p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-submit" id="submitBtn">
+                        <i class="fas fa-paper-plane me-2"></i>
+                        Submit Concern
+                    </button>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator" id="progressIndicator">
+                        <div class="d-flex align-items-center">
+                            <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                            <span>Submitting your concern...</span>
+                        </div>
+                    </div>
+
+                    <!-- Tracking Preview -->
+                    <div class="tracking-preview" id="trackingPreview">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <div>
+                                <strong>Success!</strong> Your concern has been submitted.
+                                <div>Tracking ID: <strong id="trackingIdDisplay"></strong></div>
+                                <small class="text-muted d-block mt-1" id="emailNotifyHint"></small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Interface -->
+    <div class="chat-interface">
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="d-flex align-items-center">
+                    <div class="ai-avatar-small me-2">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <strong>AI Assistant</strong>
+                        <div class="ai-status">
+                            <span class="status-dot online"></span>
+                            Online & Ready to Help
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-light" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message mb-3">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <strong>AI Assistant</strong>
+                            <small class="text-muted">Just now</small>
+                        </div>
+                        <div class="message-text">
+                            👋 Hi there! I'm your personal AI assistant for ConcernTracker. I can help you:
+                        </div>
+                        <div class="ai-quick-actions">
+                            <button class="btn-quick-action" onclick="askAboutCategories()">
+                                📂 Explain Categories
+                            </button>
+                            <button class="btn-quick-action" onclick="askAboutPriority()">
+                                🚨 Priority Levels
+                            </button>
+                            <button class="btn-quick-action" onclick="askAboutAnonymous()">
+                                🕵️ Anonymous Submission
+                            </button>
+                            <button class="btn-quick-action" onclick="askAboutTracking()">
+                                📊 Track Concerns
+                            </button>
+                        </div>
+                        <div class="message-text mt-2">
+                            💡 <strong>Pro tip:</strong> Select a common issue from the dropdown above for faster submission, or just tell me what's wrong and I'll guide you through it!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="quick-replies" id="quickReplies">
+                    <button class="btn-quick-reply" onclick="quickReply('I need help with WiFi')">
+                        📶 WiFi Issues
+                    </button>
+                    <button class="btn-quick-reply" onclick="quickReply('I have a computer problem')">
+                        💻 Computer Issues
+                    </button>
+                    <button class="btn-quick-reply" onclick="quickReply('I need to report a facility issue')">
+                        🏫 Facility Problem
+                    </button>
+                    <button class="btn-quick-reply" onclick="quickReply('I have a question about grades')">
+                        📊 Grade Question
+                    </button>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="chatInput" 
+                           placeholder="Type your message or ask me anything...">
+                    <button class="btn btn-primary" onclick="sendChatMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <small>AI is thinking...</small>
+                </div>
+            </div>
+        </div>
+        <div class="chat-bubble" onclick="toggleChat()">
+            <div class="notification-dot" id="chatNotification"></div>
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedPriority = '';
+        let uploadedFiles = [];
+        let aiAnalysisTimeout;
+        let currentUser = null;
+
+        // Common issue templates
+        const commonIssueTemplates = {
+            wifi: {
+                title: 'WiFi Connection Problems',
+                description: 'I am experiencing issues with the WiFi connection. The signal is weak/unstable or I cannot connect to the network. Location: [Please specify building/room]. Time: [Please specify when issue occurs].',
+                category: 'IT Support',
+                priority: 'medium'
+            },
+            computer: {
+                title: 'Computer/Laptop Issues',
+                description: 'My computer/laptop is not working properly. Issue: [Please describe the problem - e.g., won\'t start, slow, specific error messages]. I need this for [Please specify purpose - e.g., coursework, research].',
+                category: 'IT Support',
+                priority: 'high'
+            },
+            login: {
+                title: 'Login/Password Problems',
+                description: 'I cannot log in to [Please specify system - e.g., email, student portal, learning platform]. Error message: [Please copy any error messages]. This started on [Date].',
+                category: 'IT Support',
+                priority: 'high'
+            },
+            printing: {
+                title: 'Printer Not Working',
+                description: 'The printer in [Please specify location - e.g., library, computer lab] is not working. Issue: [e.g., out of paper, jammed, not connecting, error message]. I need to print [Please specify urgency].',
+                category: 'IT Support',
+                priority: 'medium'
+            },
+            classroom: {
+                title: 'Classroom Equipment Issues',
+                description: 'The equipment in classroom [Please specify room number] is not working. Equipment type: [e.g., projector, computer, smart board]. Issue: [Please describe problem]. This affects class at [Time].',
+                category: 'Facilities',
+                priority: 'high'
+            },
+            parking: {
+                title: 'Parking Problems',
+                description: 'I am experiencing parking issues. Problem: [e.g., no available spots, broken meter, unauthorized parking in my spot]. Location: [Please specify parking area]. Time: [When issue occurs].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            cafeteria: {
+                title: 'Cafeteria/Food Issues',
+                description: 'Issue with cafeteria service: [Please specify - e.g., food quality, long wait times, payment problems, cleanliness]. Location: [Specific cafeteria]. Time: [When issue occurred].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            bathroom: {
+                title: 'Bathroom/Maintenance Issues',
+                description: 'Bathroom maintenance issue in [Please specify building and floor]. Problem: [e.g., not flushing, no water, broken fixtures, cleanliness]. This needs urgent attention.',
+                category: 'Facilities',
+                priority: 'high'
+            },
+            lighting: {
+                title: 'Lighting Problems',
+                description: 'Lighting issue in [Please specify location - e.g., hallway, classroom, parking lot]. Problem: [e.g., flickering lights, completely dark, broken fixtures]. Safety concern: [Yes/No].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            ac: {
+                title: 'Air Conditioning/Heating',
+                description: 'Temperature control issue in [Please specify room/building]. Problem: [e.g., too hot, too cold, not working]. This affects [Number of people]. Time: [How long this has been happening].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            network: {
+                title: 'Network Connection Issues',
+                description: 'Network connectivity problems in [Please specify location]. Issue: [e.g., slow internet, intermittent connection, cannot access specific sites]. This affects my ability to [Please specify task].',
+                category: 'IT Support',
+                priority: 'medium'
+            },
+            software: {
+                title: 'Software Installation Problems',
+                description: 'I need help installing [Please specify software name]. Error message: [Please copy any error]. Computer: [Please specify OS - Windows/Mac]. Purpose: [Why software is needed].',
+                category: 'IT Support',
+                priority: 'medium'
+            },
+            email: {
+                title: 'Email Access Issues',
+                description: 'I cannot access my student email. Issue: [e.g., password not working, account locked, cannot send/receive]. Error message: [Please copy any error]. Urgency: [Please specify if urgent].',
+                category: 'IT Support',
+                priority: 'high'
+            },
+            grade: {
+                title: 'Grade/Transcript Issues',
+                description: 'Issue with my grades/transcript. Problem: [e.g., missing grade, incorrect grade, need official transcript]. Course: [Please specify course code/name]. This affects [Please specify impact].',
+                category: 'Academic Affairs',
+                priority: 'medium'
+            },
+            enrollment: {
+                title: 'Enrollment/Registration Problems',
+                description: 'I am having issues with enrollment/registration. Problem: [e.g., cannot register, class full, system error, prerequisite issue]. Semester: [Please specify]. Urgency: [Please explain if time-sensitive].',
+                category: 'Academic Affairs',
+                priority: 'high'
+            },
+            financial: {
+                title: 'Tuition/Payment Issues',
+                description: 'Issue with tuition/payment. Problem: [e.g., payment not processed, incorrect amount, payment plan issue]. Amount: [Please specify]. Due date: [Please specify]. This affects [Please explain impact].',
+                category: 'Financial Aid',
+                priority: 'high'
+            },
+            scholarship: {
+                title: 'Scholarship/Finaid Questions',
+                description: 'Questions about financial aid/scholarship. Inquiry: [e.g., application status, eligibility, renewal requirements]. Scholarship name: [Please specify]. Deadline: [Please specify if applicable].',
+                category: 'Financial Aid',
+                priority: 'medium'
+            },
+            counseling: {
+                title: 'Counseling/Mental Health Support',
+                description: 'I need counseling/mental health support. Type of support needed: [Please specify - e.g., stress, anxiety, academic pressure, personal issues]. Urgency: [Please explain if immediate help needed]. Preferred contact method: [Please specify].',
+                category: 'Student Welfare',
+                priority: 'high'
+            },
+            safety: {
+                title: 'Safety/Security Concerns',
+                description: 'Safety concern that needs attention. Issue: [Please describe safety issue]. Location: [Please specify exact location]. Time: [When this occurred/is occurring]. People affected: [Please specify if others are involved].',
+                category: 'Student Welfare',
+                priority: 'high'
+            },
+            bullying: {
+                title: 'Bullying/Harassment',
+                description: 'I am experiencing bullying/harassment. Type: [Please specify - verbal, physical, cyber, discrimination]. Location: [Where this occurs]. Frequency: [How often this happens]. I would like: [Please specify desired outcome].',
+                category: 'Student Welfare',
+                priority: 'high'
+            },
+            accessibility: {
+                title: 'Accessibility Issues',
+                description: 'Accessibility barrier in [Please specify location]. Issue: [e.g., wheelchair access, elevator broken, no ramps, visual/hearing assistance needed]. This prevents access to [Please specify what].',
+                category: 'Student Welfare',
+                priority: 'high'
+            },
+            library: {
+                title: 'Library/Study Space Issues',
+                description: 'Issue with library/study space. Problem: [e.g., no available seats, noisy, equipment not working, booking issues]. Location: [Please specify area]. Time: [When issue occurs].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            sports: {
+                title: 'Sports/Facility Booking',
+                description: 'Issue with sports facility booking. Facility: [Please specify]. Problem: [e.g., system not working, double booking, facility not ready]. Date/Time needed: [Please specify]. Purpose: [Please specify activity].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            transport: {
+                title: 'Transportation/Shuttle Issues',
+                description: 'Transportation/shuttle problem. Issue: [e.g., shuttle late, not running, overcrowded, route problem]. Route: [Please specify]. Time: [When this occurs]. Impact: [How this affects you].',
+                category: 'Facilities',
+                priority: 'medium'
+            },
+            lost: {
+                title: 'Lost and Found',
+                description: 'I have lost [Please specify item]. Description: [Please describe item in detail]. Last seen: [Location and time]. Contact info: [Please specify best way to reach you].',
+                category: 'Administrative',
+                priority: 'low'
+            },
+            other: {
+                title: '',
+                description: '',
+                category: 'Student Welfare',
+                priority: 'medium'
+            }
+        };
+
+        // Handle common issue selection
+        function selectCommonIssue() {
+            const selectedValue = document.getElementById('commonIssues').value;
+            const template = commonIssueTemplates[selectedValue];
+            
+            if (template && selectedValue !== 'other') {
+                // Auto-fill form with template
+                document.getElementById('concernTitle').value = template.title;
+                document.getElementById('concernDescription').value = template.description;
+                document.getElementById('aiCategory').value = template.category;
+                selectPriority(template.priority);
+                
+                // Trigger AI analysis
+                performAIAnalysis();
+            } else if (selectedValue === 'other') {
+                // Clear form for manual entry
+                document.getElementById('concernTitle').value = '';
+                document.getElementById('concernDescription').value = '';
+                document.getElementById('aiCategory').value = '';
+                selectedPriority = '';
+                document.querySelectorAll('.priority-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.getElementById('concernTitle').focus();
+            }
+        }
+
+        // Initialize user info from session (guest email, Google flow, or logged-in user)
+        function initializeUser() {
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            const googleEmail = sessionStorage.getItem('googleEmail');
+            const guestEmail = sessionStorage.getItem('guestEmail');
+            const isAnonymous = sessionStorage.getItem('isAnonymous') === 'true';
+            
+            currentUser = user;
+            
+            const contact =
+                (googleEmail && googleEmail.trim()) ||
+                (guestEmail && guestEmail.trim()) ||
+                (user.email && user.email.trim()) ||
+                '';
+
+            const emailInput = document.getElementById('notificationEmail');
+            if (contact) {
+                emailInput.value = contact;
+                document.getElementById('userEmail').textContent =
+                    user.name || contact.split('@')[0] || 'Student';
+            } else {
+                document.getElementById('userEmail').textContent = 'Enter your email below';
+                emailInput.focus();
+            }
+
+            if (isAnonymous) {
+                document.getElementById('anonymousBadge').style.display = 'inline-block';
+                const anon = document.getElementById('anonymousSubmit');
+                if (anon) anon.checked = true;
+            }
+
+            if (document.getElementById('concernTitle').value === '') {
+                document.getElementById('concernTitle').focus();
+            }
+        }
+
+        // AI Analysis
+        function performAIAnalysis() {
+            const title = document.getElementById('concernTitle').value;
+            const description = document.getElementById('concernDescription').value;
+            
+            if (title.length < 5 && description.length < 10) return;
+            
+            clearTimeout(aiAnalysisTimeout);
+            document.getElementById('aiThinking').style.display = 'inline-block';
+            
+            aiAnalysisTimeout = setTimeout(async () => {
+                try {
+                    // Simulate AI API call
+                    const analysis = await analyzeText(title + ' ' + description);
+                    
+                    // Update category
+                    document.getElementById('aiCategory').value = analysis.category;
+                    document.getElementById('categorySuggestionText').textContent = 
+                        `AI suggests: ${analysis.category} (confidence: ${Math.round(analysis.confidence * 100)}%)`;
+                    document.getElementById('categorySuggestion').classList.add('show');
+                    
+                    // Update priority
+                    selectPriority(analysis.priority);
+                    document.getElementById('prioritySuggestionText').textContent = 
+                        `AI suggests: ${analysis.priority.toUpperCase()} priority based on content analysis`;
+                    document.getElementById('prioritySuggestion').classList.add('show');
+                    
+                } catch (error) {
+                    console.error('AI Analysis failed:', error);
+                } finally {
+                    document.getElementById('aiThinking').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // Simulated AI analysis function
+        async function analyzeText(text) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const lowerText = text.toLowerCase();
+            
+            // Simple keyword-based categorization
+            const categories = {
+                'IT Support': ['wifi', 'computer', 'software', 'login', 'password', 'network'],
+                'Academic Affairs': ['grade', 'course', 'class', 'professor', 'exam'],
+                'Facilities': ['building', 'maintenance', 'facility'],
+                'Financial Aid': ['tuition', 'fee', 'payment', 'scholarship'],
+                'Student Welfare': ['health', 'counseling', 'safety'],
+                'Administrative': ['policy', 'form', 'document', 'record']
+            };
+            
+            let bestCategory = 'Student Welfare';
+            let maxScore = 0;
+            
+            for (const [category, keywords] of Object.entries(categories)) {
+                let score = 0;
+                keywords.forEach(keyword => {
+                    if (lowerText.includes(keyword)) score++;
+                });
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestCategory = category;
+                }
+            }
+            
+            // Priority detection
+            let priority = 'medium';
+            if (lowerText.includes('urgent') || lowerText.includes('emergency') || lowerText.includes('broken')) {
+                priority = 'high';
+            } else if (lowerText.includes('question') || lowerText.includes('inquiry')) {
+                priority = 'low';
+            }
+            
+            return {
+                category: bestCategory,
+                priority: priority,
+                confidence: Math.min(0.9, 0.5 + (maxScore * 0.1))
+            };
+        }
+
+        // Priority selection
+        function selectPriority(priority) {
+            selectedPriority = priority;
+            document.querySelectorAll('.priority-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`.priority-option.${priority}`).classList.add('selected');
+        }
+
+        // File upload handling
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+        
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('dragover');
+        });
+        
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`File ${file.name} is too large. Max size is 10MB.`);
+                    return;
+                }
+                
+                uploadedFiles.push(file);
+                displayFile(file);
+            });
+        }
+
+        function displayFile(file) {
+            const fileList = document.getElementById('fileList');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'd-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded';
+            fileItem.innerHTML = `
+                <div>
+                    <i class="fas fa-paperclip me-2"></i>
+                    <span>${file.name}</span>
+                    <small class="text-muted ms-2">(${(file.size / 1024).toFixed(1)} KB)</small>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile('${file.name}')">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            fileList.appendChild(fileItem);
+        }
+
+        function removeFile(fileName) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            document.getElementById('fileList').innerHTML = '';
+            uploadedFiles.forEach(file => displayFile(file));
+        }
+
+        // Form submission
+        document.getElementById('concernForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const notificationEmail = document.getElementById('notificationEmail').value.trim();
+            if (!notificationEmail || !notificationEmail.includes('@')) {
+                alert('Please enter a valid notification email (Gmail or school email).');
+                document.getElementById('notificationEmail').focus();
+                return;
+            }
+
+            const formData = {
+                title: document.getElementById('concernTitle').value,
+                description: document.getElementById('concernDescription').value,
+                email: notificationEmail,
+                category: document.getElementById('aiCategory').value,
+                priority: selectedPriority || 'medium',
+                isAnonymous: document.getElementById('anonymousSubmit').checked,
+                attachments: uploadedFiles.map(f => ({ name: f.name, size: f.size }))
+            };
+            
+            sessionStorage.setItem('guestEmail', notificationEmail);
+
+            // Validate
+            if (!formData.title || !formData.description) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('progressIndicator').classList.add('show');
+            
+            try {
+                const response = await fetch('/api/concerns', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('trackingIdDisplay').textContent = result.concern.trackingId;
+                    const hint = document.getElementById('emailNotifyHint');
+                    
+                    // Handle zero-config email sending
+                    if (result.emailSent && result.mailtoLink) {
+                        // Open email client automatically
+                        window.open(result.mailtoLink, '_blank');
+                        hint.textContent = 'Email client opened automatically! Click send to receive your confirmation.';
+                        hint.classList.remove('text-danger');
+                    } else if (result.emailSent) {
+                        hint.textContent = 'Email notification ready! Works automatically without setup.';
+                        hint.classList.remove('text-danger');
+                    } else {
+                        const note = result.emailNotice || 'Email notification ready.';
+                        hint.textContent = 'Email: ' + note;
+                        hint.classList.remove('text-danger');
+                    }
+                    document.getElementById('trackingPreview').classList.add('show');
+                    document.getElementById('progressIndicator').classList.remove('show');
+                    
+                    // Reset form after delay
+                    setTimeout(() => {
+                        document.getElementById('concernForm').reset();
+                        document.getElementById('trackingPreview').classList.remove('show');
+                        uploadedFiles = [];
+                        document.getElementById('fileList').innerHTML = '';
+                        selectedPriority = '';
+                        document.querySelectorAll('.priority-option').forEach(option => {
+                            option.classList.remove('selected');
+                        });
+                    }, 5000);
+                } else {
+                    throw new Error(result.error || 'Submission failed');
+                }
+            } catch (error) {
+                alert('Error submitting concern: ' + error.message);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('progressIndicator').classList.remove('show');
+            }
+        });
+
+        // Chat functionality
+        let chatOpen = false;
+        let messageCount = 0;
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatOpen = !chatOpen;
+            chatWindow.classList.toggle('show');
+            
+            // Clear notification when opening
+            if (chatOpen) {
+                document.getElementById('chatNotification').classList.remove('show');
+                messageCount = 0;
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateAIResponse(message);
+                addChatMessage(response, 'ai');
+                
+                // Suggest common issues based on message
+                suggestCommonIssue(message);
+            }, 1500 + Math.random() * 1000); // Variable response time
+        }
+
+        function addChatMessage(message, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message mb-3 ${sender}-message`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const senderName = sender === 'user' ? 'You' : 'AI Assistant';
+            const isAI = sender === 'ai';
+            
+            if (isAI) {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <strong>${senderName}</strong>
+                            <small class="text-muted">${time}</small>
+                        </div>
+                        <div class="message-text">${message}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-header">
+                            <small class="text-muted">${time}</small>
+                            <strong>${senderName}</strong>
+                        </div>
+                        <div class="message-text">${message}</div>
+                    </div>
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Show notification if chat is closed
+            if (!chatOpen && sender === 'ai') {
+                messageCount++;
+                document.getElementById('chatNotification').classList.add('show');
+            }
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('show');
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('show');
+        }
+
+        // Quick action functions
+        function askAboutCategories() {
+            const message = `📂 **Understanding Categories**
+
+I automatically categorize your concern into these departments:
+
+**🔧 IT Support**
+- WiFi, computer, login, software, email issues
+- Response time: 2-4 hours
+
+**📚 Academic Affairs** 
+- Grades, enrollment, class, professor issues
+- Response time: 4-8 hours
+
+**🏫 Facilities**
+- Building maintenance, equipment, parking, lighting
+- Response time: 1-2 hours (urgent), 4-8 hours (normal)
+
+**💰 Financial Aid**
+- Tuition, payments, scholarships, billing
+- Response time: 8-24 hours
+
+**🛡️ Student Welfare**
+- Safety, counseling, accessibility, bullying
+- Response time: 1-2 hours (urgent), 4-6 hours (normal)
+
+**📋 Administrative**
+- Lost & found, general inquiries, records
+- Response time: 4-12 hours
+
+I'll suggest the best category based on your concern!`;
+            addChatMessage(message, 'ai');
+        }
+
+        function askAboutPriority() {
+            const message = `🚨 **Priority Levels Explained**
+
+I set priority based on urgency and impact:
+
+**🔴 HIGH Priority**
+- Safety concerns, building emergencies
+- Login/account access issues
+- Broken equipment affecting classes
+- Response: Within 1 hour
+
+**🟡 MEDIUM Priority** 
+- Computer/software problems
+- Facility issues not affecting safety
+- Academic questions
+- Response: Within 4 hours
+
+**🟢 LOW Priority**
+- General questions, suggestions
+- Lost & found items
+- Non-urgent inquiries
+- Response: Within 24 hours
+
+You can also manually set priority if you disagree with my suggestion!`;
+            addChatMessage(message, 'ai');
+        }
+
+        function askAboutAnonymous() {
+            const message = `🕵️ **Anonymous Submission**
+
+Yes, you can submit concerns anonymously! Here's how it works:
+
+**✅ What's Hidden:**
+- Your name and identity from administrators
+- Your email address from public view
+- Personal identifying information
+
+**✅ What You Keep:**
+- Email notifications about your concern
+- Ability to track with ID
+- Full communication with staff
+
+**🔍 How It Works:**
+1. Check "Submit Anonymously" box
+2. Submit your concern normally
+3. Staff sees your concern but not your identity
+4. You still get email updates
+
+**🛡️ When to Use:**
+- Sensitive personal issues
+- Reporting without fear of retaliation
+- Privacy concerns
+- When you prefer discretion
+
+Your safety and privacy are my top priorities!`;
+            addChatMessage(message, 'ai');
+        }
+
+        function askAboutTracking() {
+            const message = `📊 **Tracking Your Concerns**
+
+Every concern gets a unique tracking ID like: \`CTR-2024-1001\`
+
+**🔍 Ways to Track:**
+- **Tracking ID** - Enter ID on tracking page
+- **Email** - Use your email to find all concerns
+- **Direct Link** - Click links in email updates
+
+**📈 Status Updates:**
+1. **Submitted** - We received your concern
+2. **Under Review** - Staff is analyzing
+3. **In Progress** - Someone is working on it
+4. **Resolved** - Issue is fixed
+5. **Closed** - Follow-up completed
+
+**⏰ Timeline:**
+- IT Issues: Usually 24-48 hours
+- Facilities: 1-3 days
+- Academic: 2-5 business days
+- Financial Aid: 3-7 business days
+
+**📱 Notifications:**
+- Email updates at each status change
+- SMS available for urgent issues
+- Real-time dashboard access
+
+Need help tracking? Just ask me for your tracking ID!`;
+            addChatMessage(message, 'ai');
+        }
+
+        // Quick reply function
+        function quickReply(message) {
+            document.getElementById('chatInput').value = message;
+            sendChatMessage();
+        }
+
+        // Suggest common issues based on chat
+        function suggestCommonIssue(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('wifi') || lowerMessage.includes('internet')) {
+                setTimeout(() => {
+                    addChatMessage('📶 I see you\'re having WiFi issues! Try selecting "WiFi Connection Problems" from the dropdown above - it\'ll guide you through providing the right information for faster resolution.', 'ai');
+                }, 2000);
+            } else if (lowerMessage.includes('computer') || lowerMessage.includes('laptop')) {
+                setTimeout(() => {
+                    addChatMessage('💻 Computer problems can be frustrating! The "Computer/Laptop Issues" option in the dropdown will help you describe the problem effectively.', 'ai');
+                }, 2000);
+            } else if (lowerMessage.includes('grade') || lowerMessage.includes('transcript')) {
+                setTimeout(() => {
+                    addChatMessage('📊 For academic records, the "Grade/Transcript Issues" option has specific prompts that will help the registrar assist you faster.', 'ai');
+                }, 2000);
+            }
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for specific concerns
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return `👋 Hello! I'm excited to help you submit your concern! 
+
+You can:
+• Tell me what's wrong in your own words
+• Select a common issue from the dropdown
+• Ask me about categories, priority, or tracking
+• Use the quick reply buttons below
+
+What seems to be the issue today?`;
+            }
+            
+            if (lowerMessage.includes('help')) {
+                return `🤝 I'm here to help! Here are quick ways to get started:
+
+**🎯 Fastest Way:**
+1. Use the dropdown above to select your issue
+2. I'll auto-fill a professional template
+3. Add your specific details
+4. Submit!
+
+**💬 Or Just Tell Me:**
+Describe what's wrong and I'll guide you step-by-step.
+
+**🔥 Common Issues Right Now:**
+• WiFi problems in the library
+• Computer not starting
+• Can't login to student portal
+• Room too hot/cold
+
+What's happening with your situation?`;
+            }
+            
+            if (lowerMessage.includes('urgent') || lowerMessage.includes('emergency')) {
+                return `🚨 **I understand this is urgent!**
+
+For urgent issues:
+1. I'll set priority to HIGH automatically
+2. You'll get response within 1 hour
+3. Staff will be notified immediately
+
+**🔴 If this is a safety emergency:**
+• Contact campus security: [Security Phone]
+• For medical emergencies: [Campus Health]
+• Then submit here for documentation
+
+**Quick Action:** I can pre-fill the form for you. Just tell me:
+- What type of issue (WiFi, computer, facility, etc.)
+- Where it's happening
+- How many people are affected
+
+I'm ready to help resolve this quickly!`;
+            }
+            
+            if (lowerMessage.includes('thank')) {
+                return `😊 You're very welcome! 
+
+I'm here whenever you need help with:
+• Submitting concerns
+• Tracking existing ones
+• Understanding the process
+• Any questions at all
+
+Have a great day! 🌟`;
+            }
+            
+            if (lowerMessage.includes('lost') || lowerMessage.includes('found')) {
+                return `🔍 **Lost & Found Help**
+
+I can help you report lost items or check if something was found!
+
+**For Lost Items:**
+1. Select "Lost and Found" from dropdown
+2. Describe item in detail (color, size, brand)
+3. Include where/when you last saw it
+4. Add contact info for staff to reach you
+
+**Tips for Better Recovery:**
+• Be specific about item details
+• Mention distinguishing features
+• Include your contact preference
+• Check back in 24-48 hours
+
+**To Check if Found:**
+Ask me: "Has anyone found [item description]?"
+
+What did you lose? I can help you report it properly!`;
+            }
+            
+            if (lowerMessage.includes('category') || lowerMessage.includes('categories')) {
+                return askAboutCategories().replace('```', '').replace('```', '');
+            }
+            
+            if (lowerMessage.includes('priority') || lowerMessage.includes('urgent')) {
+                return askAboutPriority().replace('```', '').replace('```', '');
+            }
+            
+            if (lowerMessage.includes('anonymous') || lowerMessage.includes('privacy')) {
+                return askAboutAnonymous().replace('```', '').replace('```', '');
+            }
+            
+            if (lowerMessage.includes('track') || lowerMessage.includes('status')) {
+                return askAboutTracking().replace('```', '').replace('```', '');
+            }
+            
+            // Default response with suggestions
+            return `🤔 I want to make sure I help you perfectly! 
+
+Could you tell me:
+1. **What type of issue** is this? (WiFi, computer, facility, academic, etc.)
+2. **Where** is it happening? (building, room, general area)
+3. **When** did it start or when is it occurring?
+
+**🎯 Or try this:**
+• Use the dropdown above - it has 25 common issues
+• Each option auto-fills with helpful prompts
+• Just select what matches your situation
+
+**💡 Quick Examples:**
+• "My WiFi keeps disconnecting in the library"
+• "The projector in Room 205 isn't working"
+• "I can't log into my student email"
+
+I'm here to guide you through this! What's happening?`;
+        }
+
+        function changeUser() {
+            if (confirm('This will clear your current session and return to login. Continue?')) {
+                sessionStorage.clear();
+                window.location.href = '/';
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                window.location.href = '/';
+            }
+        }
+
+        // Event listeners for AI analysis
+        document.getElementById('concernTitle').addEventListener('input', performAIAnalysis);
+        document.getElementById('concernDescription').addEventListener('input', performAIAnalysis);
+
+        // Enter key for chat
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeUser);
+    </script>
+</body>
+</html>

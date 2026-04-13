@@ -1,0 +1,32 @@
+{
+  "deploymentDate": "2026-04-13T05:18:49.605Z",
+  "version": "2.0.0",
+  "files": [
+    "ai-service.js",
+    "database-notification-service.js",
+    "deploy-local.js",
+    "deployment-manifest.json",
+    "DEPLOYMENT.md",
+    "env.example",
+    "mysql-database-service.js",
+    "nlp-service.js",
+    "package-lock.json",
+    "package.json",
+    "public",
+    "README.md",
+    "real-email-service.js",
+    "server-enhanced.js"
+  ],
+  "requirements": {
+    "node": ">=14.0.0",
+    "mysql": "5.7+",
+    "ftp": "required",
+    "ssh": "recommended"
+  },
+  "instructions": [
+    "1. Upload all files to InfinityFree via FTP to htdocs/",
+    "2. Run: npm install --production",
+    "3. Copy .env.production to .env and fill in your credentials",
+    "4. Run: npm start or use PM2 for persistent running"
+  ]
+}

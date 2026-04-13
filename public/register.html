@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - ConcernTrack</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/modern-ui.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F8FAFC;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        
+        [data-theme="dark"] .register-container {
+            background: #0F172A;
+        }
+        
+        .register-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            opacity: 0.08;
+            transition: opacity 0.3s ease;
+        }
+        
+        [data-theme="dark"] .register-background {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            opacity: 0.12;
+        }
+        
+        .register-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgb(107 114 128 / 0.15), 0 8px 10px -6px rgb(107 114 128 / 0.1);
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        [data-theme="dark"] .register-card {
+            background: #1E293B;
+            border-color: #334155;
+            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+        }
+        
+        .register-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -5px rgb(107 114 128 / 0.2), 0 15px 15px -6px rgb(107 114 128 / 0.15);
+        }
+        
+        [data-theme="dark"] .register-card:hover {
+            box-shadow: 0 20px 35px -5px rgb(0 0 0 / 0.4), 0 15px 15px -6px rgb(0 0 0 / 0.3);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .register-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        [data-theme="dark"] .register-logo {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            box-shadow: 0 8px 16px rgba(14, 165, 233, 0.2);
+        }
+        
+        .register-logo:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        [data-theme="dark"] .register-logo:hover {
+            box-shadow: 0 12px 20px rgba(14, 165, 233, 0.3);
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .register-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .register-title {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .register-subtitle {
+            color: #64748B;
+            font-size: 1.1rem;
+            font-weight: 400;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+            transition: color 0.3s ease;
+        }
+        
+        [data-theme="dark"] .register-subtitle {
+            color: #94A3B8;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-floating-modern {
+            position: relative;
+            margin-bottom: 1.75rem;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+        
+        .form-floating-modern input.modern-form-control,
+        .form-floating-modern select.modern-form-control {
+            width: 100%;
+            padding: 1.125rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #1F2937;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            box-sizing: border-box;
+            font-weight: 400;
+        }
+        
+        [data-theme="dark"] .form-floating-modern input.modern-form-control,
+        [data-theme="dark"] .form-floating-modern select.modern-form-control {
+            background: #0F172A;
+            border-color: #334155;
+            color: #F8FAFC;
+        }
+        
+        .form-floating-modern input.modern-form-control:focus,
+        .form-floating-modern select.modern-form-control:focus {
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+        
+        [data-theme="dark"] .form-floating-modern input.modern-form-control:focus,
+        [data-theme="dark"] .form-floating-modern select.modern-form-control:focus {
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            background: #1E293B;
+        }
+        
+        .form-floating-modern input.modern-form-control::placeholder,
+        .form-floating-modern select.modern-form-control::placeholder {
+            color: transparent;
+        }
+        
+        .form-floating-modern label {
+            position: absolute;
+            top: 50%;
+            left: 1.25rem;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            font-weight: 500;
+            background: #ffffff;
+            padding: 0 0.25rem;
+        }
+        
+        [data-theme="dark"] .form-floating-modern label {
+            color: #6B7280;
+            background: #0F172A;
+        }
+        
+        .form-floating-modern input.modern-form-control:focus + label,
+        .form-floating-modern input.modern-form-control:not(:placeholder-shown) + label,
+        .form-floating-modern select.modern-form-control:focus + label,
+        .form-floating-modern select.modern-form-control:valid + label {
+            top: -0.5rem;
+            transform: translateY(0);
+            font-size: 0.75rem;
+            color: #0EA5E9;
+            background: #ffffff;
+            padding: 0 0.5rem;
+        }
+        
+        [data-theme="dark"] .form-floating-modern input.modern-form-control:focus + label,
+        [data-theme="dark"] .form-floating-modern input.modern-form-control:not(:placeholder-shown) + label,
+        [data-theme="dark"] .form-floating-modern select.modern-form-control:focus + label,
+        [data-theme="dark"] .form-floating-modern select.modern-form-control:valid + label {
+            color: #0EA5E9;
+            background: #1E293B;
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+        }
+        
+        .password-strength.weak {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        [data-theme="dark"] .password-strength.weak {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        
+        .password-strength.medium {
+            background: rgba(251, 191, 36, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        [data-theme="dark"] .password-strength.medium {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .password-strength.strong {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        [data-theme="dark"] .password-strength.strong {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 1.125rem;
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+        
+        [data-theme="dark"] .register-btn {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+        }
+        
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(14, 165, 233, 0.3);
+        }
+        
+        [data-theme="dark"] .register-btn:hover {
+            box-shadow: 0 12px 24px rgba(14, 165, 233, 0.2);
+        }
+        
+        .register-btn:hover::before {
+            left: 100%;
+        }
+        
+        .register-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            animation: fadeIn 0.8s ease-out 0.7s both;
+            transition: border-color 0.3s ease;
+        }
+        
+        [data-theme="dark"] .login-link {
+            border-top-color: #334155;
+        }
+        
+        .login-link a {
+            color: #0EA5E9;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        [data-theme="dark"] .login-link a {
+            color: #0EA5E9;
+        }
+        
+        .login-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #0EA5E9;
+            transition: width 0.3s ease;
+        }
+        
+        [data-theme="dark"] .login-link a::after {
+            background: #0EA5E9;
+        }
+        
+        .login-link a:hover {
+            color: #4B5563;
+        }
+        
+        [data-theme="dark"] .login-link a:hover {
+            color: #D1D5DB;
+        }
+        
+        .login-link a:hover::after {
+            width: 100%;
+        }
+        
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        [data-theme="dark"] .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+        
+        .error-message {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        [data-theme="dark"] .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        
+        .terms-section {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #F8FAFC;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .terms-section {
+            background: #0F172A;
+            border-color: #334155;
+        }
+        
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .terms-checkbox input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin: 0;
+            margin-top: 0.125rem;
+            accent-color: #6B7280;
+            cursor: pointer;
+        }
+        
+        [data-theme="dark"] .terms-checkbox input[type="checkbox"] {
+            accent-color: #9CA3AF;
+        }
+        
+        .terms-checkbox label {
+            color: #6B7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        [data-theme="dark"] .terms-checkbox label {
+            color: #9CA3AF;
+        }
+        
+        .terms-checkbox a {
+            color: #6B7280;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .terms-checkbox a {
+            color: #9CA3AF;
+        }
+        
+        .terms-checkbox a:hover {
+            color: #4B5563;
+            border-bottom-color: #4B5563;
+        }
+        
+        [data-theme="dark"] .terms-checkbox a:hover {
+            color: #D1D5DB;
+            border-bottom-color: #D1D5DB;
+        }
+        
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .terms-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgb(107 114 128 / 0.15);
+            border: 1px solid #e5e7eb;
+        }
+        
+        [data-theme="dark"] .terms-modal-content {
+            background: #1E293B;
+            border-color: #334155;
+        }
+        
+        .terms-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        [data-theme="dark"] .terms-modal-header {
+            border-bottom-color: #334155;
+        }
+        
+        .terms-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0;
+        }
+        
+        [data-theme="dark"] .terms-modal-title {
+            color: #F8FAFC;
+        }
+        
+        .terms-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .terms-modal-close {
+            color: #9CA3AF;
+        }
+        
+        .terms-modal-close:hover {
+            background: #F8FAFC;
+            color: #4B5563;
+        }
+        
+        [data-theme="dark"] .terms-modal-close:hover {
+            background: #0F172A;
+            color: #D1D5DB;
+        }
+        
+        .terms-modal-body {
+            color: #6B7280;
+            line-height: 1.6;
+        }
+        
+        [data-theme="dark"] .terms-modal-body {
+            color: #9CA3AF;
+        }
+        
+        .terms-modal-body h3 {
+            color: #1F2937;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        [data-theme="dark"] .terms-modal-body h3 {
+            color: #F8FAFC;
+        }
+        
+        .terms-modal-body ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .terms-modal-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .terms-modal-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            text-align: right;
+        }
+        
+        [data-theme="dark"] .terms-modal-footer {
+            border-top-color: #334155;
+        }
+        
+        .terms-modal-close-btn {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .terms-modal-close-btn {
+            background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+        }
+        
+        .terms-modal-close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(107, 114, 128, 0.2);
+        }
+        
+        @media (max-width: 640px) {
+            .register-card {
+                margin: 1rem;
+                padding: 2rem;
+                max-width: 95%;
+            }
+            
+            .register-title {
+                font-size: 2rem;
+            }
+            
+            .register-logo {
+                width: 64px;
+                height: 64px;
+                font-size: 1.5rem;
+            }
+            
+            .form-floating-modern {
+                margin-bottom: 1.5rem;
+            }
+            
+            .register-btn {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="register-container">
+        <div class="register-background"></div>
+        <div class="register-card">
+            <div class="register-header">
+                <div class="register-logo">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h1 class="register-title">Student Registration</h1>
+                <p class="register-subtitle">Create your account to get started</p>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle me-2"></i>
+                Registration successful! Redirecting to login...
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="errorText">Registration failed. Please try again.</span>
+            </div>
+            
+            <form id="registerForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating-modern">
+                            <input type="text" class="modern-form-control" id="firstName" name="firstName" 
+                                   placeholder="First Name" required>
+                            <label for="firstName">
+                                <i class="fas fa-user me-2"></i>First Name
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating-modern">
+                            <input type="text" class="modern-form-control" id="lastName" name="lastName" 
+                                   placeholder="Last Name" required>
+                            <label for="lastName">
+                                <i class="fas fa-user me-2"></i>Last Name
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-floating-modern">
+                    <input type="email" class="modern-form-control" id="email" name="email" 
+                           placeholder="Email Address" required>
+                    <label for="email">
+                        <i class="fas fa-envelope me-2"></i>Email Address
+                    </label>
+                </div>
+                
+                <div class="form-floating-modern">
+                    <input type="text" class="modern-form-control" id="studentId" name="studentId" 
+                           placeholder="Student ID" required>
+                    <label for="studentId">
+                        <i class="fas fa-id-card me-2"></i>Student ID
+                    </label>
+                </div>
+                
+                <div class="form-floating-modern">
+                    <input type="text" class="modern-form-control" id="department" name="department" 
+                           placeholder="Department" required list="department-list">
+                    <label for="department">
+                        <i class="fas fa-building me-2"></i>Department
+                    </label>
+                    <datalist id="department-list">
+                        <option value="Computer Science">
+                        <option value="Information Technology">
+                        <option value="Engineering">
+                        <option value="Business Administration">
+                        <option value="Business">
+                        <option value="Arts">
+                        <option value="Science">
+                        <option value="Medicine">
+                        <option value="Nursing">
+                        <option value="Education">
+                        <option value="Architecture">
+                        <option value="Law">
+                        <option value="Pharmacy">
+                        <option value="Psychology">
+                        <option value="Mathematics">
+                        <option value="Physics">
+                        <option value="Chemistry">
+                        <option value="Biology">
+                        <option value="Economics">
+                        <option value="Sociology">
+                        <option value="Literature">
+                        <option value="History">
+                        <option value="Philosophy">
+                    </datalist>
+                </div>
+                
+                <div class="form-floating-modern">
+                    <input type="password" class="modern-form-control" id="password" name="password" 
+                           placeholder="Password" required>
+                    <label for="password">
+                        <i class="fas fa-lock me-2"></i>Password
+                    </label>
+                </div>
+                
+                <div class="form-floating-modern">
+                    <input type="password" class="modern-form-control" id="confirmPassword" name="confirmPassword" 
+                           placeholder="Confirm Password" required>
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock me-2"></i>Confirm Password
+                    </label>
+                </div>
+                
+                <div class="password-strength" id="passwordStrength" style="display: none;">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <span id="strengthText">Password strength</span>
+                </div>
+                
+                <div class="terms-section" style="animation: fadeIn 0.8s ease-out 0.6s both;">
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            I agree to the <a href="#" onclick="showTerms(event); return false;">Terms of Service</a> and <a href="#" onclick="showPrivacy(event); return false;">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <i class="fas fa-user-plus me-2"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="login-link">
+                <p class="mb-0">Already have an account?</p>
+                <a href="/">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div class="terms-modal" id="termsModal">
+        <div class="terms-modal-content">
+            <div class="terms-modal-header">
+                <h2 class="terms-modal-title">Terms of Service</h2>
+                <button class="terms-modal-close" onclick="closeTermsModal()">&times;</button>
+            </div>
+            <div class="terms-modal-body">
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing and using ConcernTrack, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                
+                <h3>2. Use License</h3>
+                <p>Permission is granted to temporarily use ConcernTrack for the purpose of submitting and tracking student concerns.</p>
+                
+                <h3>3. User Responsibilities</h3>
+                <ul>
+                    <li>Submit only legitimate and accurate concerns</li>
+                    <li>Provide truthful information in all submissions</li>
+                    <li>Respect the privacy and rights of others</li>
+                    <li>Use the system responsibly and ethically</li>
+                    <li>Report issues promptly and accurately</li>
+                </ul>
+                
+                <h3>4. Privacy and Data Protection</h3>
+                <p>Your personal information is protected and handled in accordance with our Privacy Policy. Concerns are treated with confidentiality and used for administrative purposes only.</p>
+                
+                <h3>3. Prohibited Activities</h3>
+                <ul>
+                    <li>Submitting false or misleading information</li>
+                    <li>Using the system for illegal or unauthorized purposes</li>
+                    <li>Attempting to harm or disrupt the system</li>
+                    <li>Violating university policies or codes of conduct</li>
+                </ul>
+                
+                <h3>6. Intellectual Property</h3>
+                <p>All content and materials on ConcernTrack are owned by the institution and are protected by intellectual property laws.</p>
+                
+                <h3>7. Limitation of Liability</h3>
+                <p>The institution is not liable for any damages arising from your use of ConcernTrack.</p>
+                
+                <h3>8. Termination</h3>
+                <p>We reserve the right to terminate or suspend access to ConcernTrack for violations of these terms.</p>
+            </div>
+            <div class="terms-modal-footer">
+                <button class="terms-modal-close-btn" onclick="closeTermsModal()">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div class="terms-modal" id="privacyModal">
+        <div class="terms-modal-content">
+            <div class="terms-modal-header">
+                <h2 class="terms-modal-title">Privacy Policy</h2>
+                <button class="terms-modal-close" onclick="closePrivacyModal()">&times;</button>
+            </div>
+            <div class="terms-modal-body">
+                <h3>1. Information We Collect</h3>
+                <p>We collect personal information you provide when registering and using ConcernTrack, including:</p>
+                <ul>
+                    <li>Name and contact information</li>
+                    <li>Student identification details</li>
+                    <li>Academic program/department information</li>
+                    <li>Concern submissions and related data</li>
+                </ul>
+                
+                <h3>2. How We Use Your Information</h3>
+                <p>Your information is used to:</p>
+                <ul>
+                    <li>Process and address your concerns</li>
+                    <li>Provide administrative support</li>
+                    <li>Improve our services</li>
+                    <li>Comply with legal requirements</li>
+                </ul>
+                
+                <h3>3. Data Protection and Security</h3>
+                <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+                
+                <h3>4. Anonymous Options</h3>
+                <p>Where permitted, you may submit concerns anonymously. Anonymous submissions are handled with additional privacy protections.</p>
+                
+                <h3>5. Information Sharing</h3>
+                <p>Your information may be shared with authorized university personnel for the purpose of addressing your concerns. We do not sell your personal information to third parties.</p>
+                
+                <h3>6. Data Retention</h3>
+                <p>We retain your information only as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required or permitted by law.</p>
+                
+                <h3>7. Your Rights</h3>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Access your personal information</li>
+                    <li>Correct inaccurate information</li>
+                    <li>Request deletion of your information</li>
+                    <li>Opt-out of certain data processing</li>
+                </ul>
+                
+                <h3>8. Compliance with Regulations</h3>
+                <p>We comply with applicable privacy laws and regulations, including educational privacy laws and data protection regulations.</p>
+            </div>
+            <div class="terms-modal-footer">
+                <button class="terms-modal-close-btn" onclick="closePrivacyModal()">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', currentTheme);
+
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const strengthText = document.getElementById('strengthText');
+        const registerForm = document.getElementById('registerForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            return strength;
+        }
+
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            const strength = checkPasswordStrength(password);
+            
+            if (password.length > 0) {
+                passwordStrength.style.display = 'block';
+                
+                if (strength <= 2) {
+                    passwordStrength.className = 'password-strength weak';
+                    strengthText.textContent = 'Weak password - add more characters, numbers, and symbols';
+                } else if (strength <= 4) {
+                    passwordStrength.className = 'password-strength medium';
+                    strengthText.textContent = 'Medium strength - good, but could be stronger';
+                } else {
+                    passwordStrength.className = 'password-strength strong';
+                    strengthText.textContent = 'Strong password - excellent!';
+                }
+            } else {
+                passwordStrength.style.display = 'none';
+            }
+        });
+
+        registerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data manually to combine first and last name
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const studentId = document.getElementById('studentId').value;
+            const department = document.getElementById('department').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Combine first and last name
+            const fullName = `${firstName} ${lastName}`;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorText.textContent = 'Passwords do not match. Please try again.';
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                return;
+            }
+            
+            // Validate password strength
+            const strength = checkPasswordStrength(password);
+            if (strength <= 2) {
+                errorText.textContent = 'Password is too weak. Please choose a stronger password.';
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: fullName,
+                        email: email,
+                        studentId: studentId,
+                        program: department,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    
+                    // Store user data in sessionStorage
+                    const userData = {
+                        name: fullName,
+                        email: email,
+                        studentId: studentId,
+                        program: department,
+                        role: 'student'
+                    };
+                    sessionStorage.setItem('user', JSON.stringify(userData));
+                    
+                    registerForm.reset();
+                    passwordStrength.style.display = 'none';
+                    
+                    // Redirect to dashboard after 2 seconds (auto-login)
+                    setTimeout(() => {
+                        window.location.href = 'student-dashboard.html';
+                    }, 2000);
+                } else {
+                    errorText.textContent = result.error || 'Registration failed. Please try again.';
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+            } catch (error) {
+                errorText.textContent = 'Network error. Please check your connection and try again.';
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+        });
+        
+        // Terms and Privacy Modal Functions
+        function showTerms(event) {
+            event.preventDefault();
+            document.getElementById('termsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function showPrivacy(event) {
+            event.preventDefault();
+            document.getElementById('privacyModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeTermsModal() {
+            document.getElementById('termsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function closePrivacyModal() {
+            document.getElementById('privacyModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('terms-modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.getElementById('termsModal').style.display = 'none';
+                document.getElementById('privacyModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

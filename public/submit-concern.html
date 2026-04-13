@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Concern - ConcernTrack</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/modern-ui.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0EA5E9;
+            --secondary-color: #14B8A6;
+            --accent-color: #6366F1;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --dark-color: #1E293B;
+            --light-color: #F8FAFC;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .submit-container {
+            min-height: 100vh;
+            background: var(--bg-secondary);
+            padding: 2rem 0;
+        }
+        
+        .submit-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .submit-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            animation: spin 60s linear infinite;
+        }
+        
+        .submit-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+        
+        .submit-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+        
+        .submit-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: slideUp 0.6s ease-out 0.4s both;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: slideInLeft 0.5s ease-out both;
+        }
+        
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+        .category-card:nth-child(4) { animation-delay: 0.4s; }
+        .category-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .category-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(14, 165, 233, 0.05);
+            animation: pulse 0.6s ease-out;
+        }
+        
+        .category-card.selected::before {
+            opacity: 0.1;
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+            animation: bounce 0.6s ease;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .category-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .dropdown-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .dropdown-section .form-label {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-section .form-select {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .dropdown-section .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        #otherCategorySpec {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .urgent-warning {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            animation: urgentPulse 2s infinite;
+            box-shadow: 0 8px 32px rgba(255, 71, 87, 0.3);
+            border: 2px solid #ff4757;
+            margin: 2rem 0;
+        }
+
+        .urgent-warning .urgent-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: urgentShake 0.5s ease-in-out infinite alternate;
+        }
+
+        .urgent-warning h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .urgent-warning p {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .urgent-warning strong {
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes urgentShake {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-5px); }
+        }
+        
+        .priority-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 16px;
+            animation: slideUp 0.5s ease-out 0.6s both;
+        }
+        
+        .priority-option {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .priority-option:hover {
+            transform: translateY(-2px);
+        }
+        
+        .priority-option.selected {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-sm);
+            animation: pulse 0.4s ease-out;
+        }
+        
+        .priority-high.selected {
+            color: #ef4444;
+        }
+        
+        .priority-medium.selected {
+            color: #f59e0b;
+        }
+        
+        .priority-low.selected {
+            color: #22c55e;
+        }
+        
+        .form-section {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            animation: slideUp 0.5s ease-out both;
+        }
+        
+        .form-section:nth-of-type(2) { animation-delay: 0.7s; }
+        .form-section:nth-of-type(3) { animation-delay: 0.8s; }
+        .form-section:nth-of-type(4) { animation-delay: 0.9s; }
+        .form-section:nth-of-type(5) { animation-delay: 1.0s; }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInLeft 0.4s ease-out both;
+        }
+        
+        .section-title i {
+            color: var(--primary-color);
+            animation: bounce 0.6s ease;
+        }
+        
+        .form-floating-modern {
+            position: relative;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.4s ease-out both;
+        }
+        
+        .form-floating-modern:nth-of-type(1) { animation-delay: 0.1s; }
+        .form-floating-modern:nth-of-type(2) { animation-delay: 0.2s; }
+        .form-floating-modern:nth-of-type(3) { animation-delay: 0.3s; }
+        .form-floating-modern:nth-of-type(4) { animation-delay: 0.4s; }
+        
+        .form-floating-modern label {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        
+        .form-floating-modern input:focus + label,
+        .form-floating-modern input:not(:placeholder-shown) + label,
+        .form-floating-modern textarea:focus + label,
+        .form-floating-modern textarea:not(:placeholder-shown) + label {
+            top: 0.5rem;
+            transform: translateY(0);
+            font-size: 0.875rem;
+            color: var(--primary-color);
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
+        .form-floating-modern input:focus,
+        .form-floating-modern textarea:focus {
+            animation: pulse 0.4s ease-out;
+        }
+        
+        .attachment-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            animation: slideUp 0.5s ease-out 0.5s both;
+        }
+        
+        .attachment-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(14, 165, 233, 0.02);
+            transform: scale(1.02);
+        }
+        
+        .attachment-area.has-file {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.02);
+            animation: pulse 0.6s ease-out;
+        }
+        
+        .attachment-area i {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        
+        .attachment-area:hover i {
+            color: var(--primary-color);
+            animation: bounce 0.6s ease;
+        }
+        
+        .file-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        .file-preview.show {
+            display: block;
+        }
+        
+        .file-preview.show .file-info {
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out 1.1s both;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        .submit-btn i {
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .submit-btn:hover i {
+            animation: bounce 0.6s ease;
+        }
+        
+        .anonymous-toggle {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            animation: slideUp 0.4s ease-out 1.0s both;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border-color);
+            transition: var(--transition);
+            border-radius: 30px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* AI Features */
+        .ai-suggestion-message {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .ai-content {
+            flex: 1;
+        }
+
+        .ai-content strong {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .ai-content small {
+            color: var(--text-secondary);
+        }
+
+        .ai-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .ai-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            animation: slideInLeft 0.5s ease-out;
+            z-index: 2;
+        }
+
+        .ai-badge i {
+            font-size: 0.6rem;
+        }
+
+        .ai-success-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .ai-success-message .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .ai-success-message h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .ai-success-message p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .smart-reply-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .smart-reply-box strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .smart-reply-box p {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .priority-selector {
+                flex-direction: column;
+            }
+            
+            .submit-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navbar -->
+    <nav class="navbar navbar-expand-lg modern-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="student-dashboard.html">
+                <i class="fas fa-clipboard-list me-2"></i>ConcernTrack
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="student-dashboard.html">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="submit-concern.html">
+                            <i class="fas fa-plus-circle me-2"></i>Submit Concern
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-concerns.html">
+                            <i class="fas fa-list me-2"></i>My Concerns
+                        </a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <span class="navbar-text me-3">
+                        <i class="fas fa-user me-2"></i>
+                        <span id="userName">Loading...</span>
+                    </span>
+                    <a class="nav-link" href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="submit-container">
+        <!-- Header -->
+        <div class="submit-header">
+            <div class="container">
+                <div class="submit-content">
+                    <h1 class="submit-title">Submit a Concern</h1>
+                    <p class="submit-subtitle">We're here to help. Tell us about your concern.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="container">
+            <form id="submitConcernForm">
+                <input type="hidden" id="concernId" name="concernId">
+                
+                <!-- Category Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-tag"></i>
+                        Select Category
+                    </h2>
+                    
+                    <!-- Visual Category Cards -->
+                    <div class="category-grid">
+                        <div class="category-card" data-category="academic">
+                            <div class="category-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="category-name">Academic</div>
+                            <div class="category-description">Course-related issues, grades, exams</div>
+                        </div>
+                        <div class="category-card" data-category="financial">
+                            <div class="category-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="category-name">Financial</div>
+                            <div class="category-description">Tuition, scholarships, financial aid</div>
+                        </div>
+                        <div class="category-card" data-category="welfare">
+                            <div class="category-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="category-name">Welfare</div>
+                            <div class="category-description">Health, counseling, support services</div>
+                        </div>
+                        <div class="category-card" data-category="it">
+                            <div class="category-icon">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <div class="category-name">IT Support</div>
+                            <div class="category-description">Network, software, hardware issues</div>
+                        </div>
+                        <div class="category-card" data-category="facilities">
+                            <div class="category-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="category-name">Facilities</div>
+                            <div class="category-description">Campus infrastructure, maintenance</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dropdown Selection -->
+                    <div class="dropdown-section mt-4">
+                        <label for="categoryDropdown" class="form-label">
+                            <i class="fas fa-list me-2"></i>Or select from dropdown:
+                        </label>
+                        <select class="form-select modern-form-control" id="categoryDropdown">
+                            <option value="">Choose a category...</option>
+                            <option value="academic">🎓 Academic</option>
+                            <option value="financial">💰 Financial</option>
+                            <option value="welfare">❤️ Welfare</option>
+                            <option value="it">💻 IT Support</option>
+                            <option value="facilities">🏫 Facilities</option>
+                            <option value="other">📋 Other (Please specify)</option>
+                        </select>
+                        
+                        <!-- Other category specification -->
+                        <div id="otherCategorySpec" class="mt-3" style="display: none;">
+                            <div class="form-floating-modern">
+                                <input type="text" class="modern-form-control" id="otherCategoryText" 
+                                       placeholder="Please specify your category">
+                                <label for="otherCategoryText">
+                                    <i class="fas fa-edit me-2"></i>Specify Category
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="category" name="category" required>
+                </div>
+
+                <!-- Priority Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Priority Level
+                    </h2>
+                    <div class="priority-selector">
+                        <div class="priority-option priority-high" data-priority="high">
+                            <i class="fas fa-fire me-2"></i>
+                            High
+                        </div>
+                        <div class="priority-option priority-medium" data-priority="medium">
+                            <i class="fas fa-clock me-2"></i>
+                            Medium
+                        </div>
+                        <div class="priority-option priority-low" data-priority="low">
+                            <i class="fas fa-check me-2"></i>
+                            Low
+                        </div>
+                    </div>
+                    <input type="hidden" id="priority" name="priority" required>
+                </div>
+
+                <!-- Concern Details -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-edit"></i>
+                        Concern Details
+                    </h2>
+                    
+                    <!-- Common Concerns Dropdown -->
+                    <div class="mb-4">
+                        <label for="commonConcerns" class="form-label">
+                            <i class="fas fa-lightbulb me-2"></i>Common Concerns (Select one)
+                        </label>
+                        <select class="form-select modern-form-control" id="commonConcerns">
+                            <option value="">Select a common concern...</option>
+                            <optgroup label="📶 WiFi & Network Issues">
+                                <option value="WiFi slow in library">WiFi slow in library</option>
+                                <option value="Can't connect to campus WiFi">Can't connect to campus WiFi</option>
+                                <option value="Internet keeps disconnecting">Internet keeps disconnecting</option>
+                                <option value="No WiFi in dormitory">No WiFi in dormitory</option>
+                            </optgroup>
+                            <optgroup label="🔐 Student Portal Issues">
+                                <option value="Can't login to student portal">Can't login to student portal</option>
+                                <option value="Forgot password">Forgot password</option>
+                                <option value="Portal access denied">Portal access denied</option>
+                                <option value="Grades not showing">Grades not showing</option>
+                            </optgroup>
+                            <optgroup label="🏫 Room & Facility Issues">
+                                <option value="Room booking system not working">Room booking system not working</option>
+                                <option value="Classroom too hot/cold">Classroom too hot/cold</option>
+                                <option value="Broken equipment in lab">Broken equipment in lab</option>
+                                <option value="Lighting issues in study area">Lighting issues in study area</option>
+                            </optgroup>
+                            <optgroup label="💻 Computer & Software">
+                                <option value="Computer lab computers slow">Computer lab computers slow</option>
+                                <option value="Software not installed">Software not installed</option>
+                                <option value="Printer not working">Printer not working</option>
+                                <option value="Can't access course materials">Can't access course materials</option>
+                            </optgroup>
+                            <optgroup label="📚 Academic Issues">
+                                <option value="Missing grade in course">Missing grade in course</option>
+                                <option value="Schedule conflict">Schedule conflict</option>
+                                <option value="Need course add/drop">Need course add/drop</option>
+                                <option value="Exam scheduling issue">Exam scheduling issue</option>
+                            </optgroup>
+                            <optgroup label="💰 Financial Aid">
+                                <option value="Scholarship application issue">Scholarship application issue</option>
+                                <option value="Tuition payment problem">Tuition payment problem</option>
+                                <option value="Financial aid delay">Financial aid delay</option>
+                                <option value="Work-study payment issue">Work-study payment issue</option>
+                            </optgroup>
+                            <optgroup label="❤️ Health & Support">
+                                <option value="Need counseling appointment">Need counseling appointment</option>
+                                <option value="Medical center wait time">Medical center wait time</option>
+                                <option value="Accessibility accommodation">Accessibility accommodation</option>
+                                <option value="Mental health support">Mental health support</option>
+                            </optgroup>
+                        </select>
+                        <small class="text-muted">Select a common concern or describe your own below</small>
+                    </div>
+                    
+                    <div class="form-floating-modern">
+                        <input type="text" class="modern-form-control" id="title" name="title" 
+                               placeholder="Brief summary of your concern" required>
+                        <label for="title">
+                            <i class="fas fa-heading me-2"></i>Title
+                        </label>
+                    </div>
+
+                    <div class="form-floating-modern">
+                        <textarea class="modern-form-control" id="description" name="description" rows="5" 
+                                  placeholder="Please provide detailed information about your concern..." required></textarea>
+                        <label for="description">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </label>
+                    </div>
+
+                    <!-- Anonymous Option -->
+                    <div class="anonymous-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="anonymous" name="anonymous">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <div>
+                            <strong>Submit anonymously</strong>
+                            <div class="text-muted small">Your identity will be hidden from the concern details</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attachment -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-paperclip"></i>
+                        Attachment (Optional)
+                    </h2>
+                    <div class="attachment-area" onclick="document.getElementById('attachment').click()">
+                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                        <h4>Click to upload or drag and drop</h4>
+                        <p class="text-muted">Upload images, PDFs, or documents (Max 5MB)</p>
+                        <input type="file" class="d-none" id="attachment" name="attachment" 
+                               accept="image/*,.pdf,.doc,.docx" onchange="handleFileSelect(this)">
+                    </div>
+                    <div id="fileInfo" class="text-muted mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        No file selected
+                    </div>
+                    <div id="filePreview" class="file-preview"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-section">
+                    <button type="submit" id="submitBtn" class="submit-btn">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Concern
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-modern">
+                <div class="modal-body text-center py-4">
+                    <div class="text-success mb-3">
+                        <i class="fas fa-check-circle fa-4x"></i>
+                    </div>
+                    <h4>Concern Submitted Successfully!</h4>
+                    <p>Your concern has been submitted and routed to the appropriate department.</p>
+                    <p><strong>Concern ID:</strong> <span id="concernIdDisplay"></span></p>
+                    <div class="mt-4">
+                        <button type="button" class="btn-modern btn-primary-modern me-2" onclick="viewDashboard()">
+                            <i class="fas fa-tachometer-alt me-2"></i>View Dashboard
+                        </button>
+                        <button type="button" class="btn-modern btn-secondary-modern" onclick="submitAnother()">
+                            <i class="fas fa-plus me-2"></i>Submit Another
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/theme-toggle.js"></script>
+    <script>
+        let currentUser = null;
+
+        function checkAuth() {
+            const userStr = sessionStorage.getItem('user');
+            if (!userStr) {
+                window.location.href = '/';
+                return null;
+            }
+            
+            const user = JSON.parse(userStr);
+            if (user.role !== 'student') {
+                window.location.href = '/';
+                return null;
+            }
+            
+            return user;
+        }
+
+        // AI Concern Categorizer
+        const aiCategoryPatterns = {
+            'academic': [
+                'course', 'class', 'professor', 'teacher', 'grade', 'exam', 'test', 'assignment', 'homework', 
+                'lecture', 'schedule', 'curriculum', 'subject', 'study', 'learning', 'education', 'academic',
+                'syllabus', 'semester', 'credit', 'degree', 'major', 'minor', 'thesis', 'dissertation'
+            ],
+            'it': [
+                'wifi', 'network', 'internet', 'computer', 'laptop', 'software', 'hardware', 'login', 'password',
+                'portal', 'email', 'system', 'server', 'website', 'app', 'application', 'tech', 'technology',
+                'connection', 'disconnect', 'slow', 'crash', 'bug', 'error', 'access', 'online', 'digital'
+            ],
+            'facilities': [
+                'room', 'building', 'classroom', 'library', 'dorm', 'cafeteria', 'parking', 'restroom', 'bathroom',
+                'maintenance', 'repair', 'broken', 'leak', 'electric', 'outlet', 'light', 'air conditioning', 'ac',
+                'heating', 'plumbing', 'door', 'window', 'furniture', 'campus', 'infrastructure'
+            ],
+            'financial': [
+                'tuition', 'fee', 'payment', 'money', 'cost', 'scholarship', 'grant', 'loan', 'financial aid',
+                'refund', 'billing', 'invoice', 'budget', 'expense', 'card', 'transaction', 'account', 'bank'
+            ],
+            'welfare': [
+                'health', 'medical', 'counseling', 'mental health', 'stress', 'anxiety', 'depression', 'wellness',
+                'support', 'help', 'emergency', 'safety', 'security', 'bullying', 'harassment', 'discrimination',
+                'accommodation', 'disability', 'accessibility', 'food', 'housing', 'transportation'
+            ]
+        };
+
+        // AI Priority Detection - Enhanced for Safety
+        function detectPriority(description) {
+            const urgentKeywords = {
+                'high': [
+                    'broken', 'sparking', 'electrical', 'fire', 'smoke', 'burning', 'shock', 'dangerous', 'hazard', 'emergency', 'urgent', 'immediate', 'safety', 'injury', 'accident', 'explosion', 'leaking', 'gas', 'chemical', 'toxic', 'falling', 'collapse', 'blocked', 'trapped', 'medical', 'bleeding', 'unconscious', 'severe', 'critical', 'life threatening', 'no power', 'outage', 'flood', 'water damage', 'structural', 'crack', 'broken glass', 'sharp', 'needle', 'blood', 'assault', 'theft', 'violence', 'weapon', 'gun', 'knife', 'threat', 'harassment', 'bullying', 'panic', 'scared', 'afraid', 'help', 'police', 'security', 'ambulance', 'hospital', 'doctor', 'nurse'
+                ],
+                'medium': [
+                    'slow', 'not working', 'broken', 'issue', 'problem', 'malfunction', 'error', 'failed', 'crashed', 'freeze', 'stuck', 'jammed', 'blocked', 'clogged', 'leaking', 'dripping', 'noise', 'loud', 'disruptive', 'uncomfortable', 'too hot', 'too cold', 'temperature', 'heating', 'cooling', 'air conditioning', 'plumbing', 'internet', 'wifi', 'network', 'connection', 'login', 'access', 'password', 'account', 'grades', 'missing', 'lost', 'stolen', 'damaged', 'vandalism', 'cleanliness', 'messy', 'dirty', 'pest', 'insect', 'rodent', 'maintenance', 'repair', 'replace', 'upgrade', 'install', 'setup', 'confusing', 'difficult', 'complicated', 'deadline', 'due', 'late', 'extension', 'help needed', 'assistance required'
+                ],
+                'low': [
+                    'suggestion', 'improvement', 'idea', 'recommend', 'feedback', 'comment', 'question', 'inquiry', 'information', 'clarification', 'request', 'prefer', 'would like', 'nice to have', 'convenient', 'better', 'enhance', 'optimize', 'feature', 'addition', 'cosmetic', 'appearance', 'design', 'layout', 'organization', 'comfort', 'amenity', 'extra', 'additional', 'optional', 'minor', 'small', 'slight', 'occasional', 'sometimes', 'rarely', 'infrequent'
+                ]
+            };
+            
+            let highScore = 0;
+            let mediumScore = 0;
+            let lowScore = 0;
+            
+            const words = description.toLowerCase().split(/\s+/);
+            
+            words.forEach(word => {
+                if (urgentKeywords.high.includes(word)) highScore += 3;
+                if (urgentKeywords.medium.includes(word)) mediumScore += 2;
+                if (urgentKeywords.low.includes(word)) lowScore += 1;
+            });
+            
+            // Additional safety checks for specific patterns
+            const urgentPatterns = [
+                /sparking.*electrical/,
+                /broken.*outlet/,
+                /fire.*alarm/,
+                /smoke.*detector/,
+                /gas.*leak/,
+                /water.*leak/,
+                /structural.*damage/,
+                /medical.*emergency/,
+                /safety.*hazard/,
+                /immediate.*attention/,
+                /urgent.*help/,
+                /life.*threat/,
+                /dangerous.*condition/
+            ];
+            
+            urgentPatterns.forEach(pattern => {
+                if (pattern.test(description.toLowerCase())) {
+                    highScore += 5;
+                }
+            });
+            
+            // Determine priority
+            if (highScore >= 3) return 'high';
+            if (mediumScore >= 2) return 'medium';
+            if (lowScore >= 1) return 'low';
+            return 'medium'; // Default to medium
+        }
+
+        // AI Concern Categorizer
+        function aiCategorizeConcern(description, title) {
+            const text = `${title} ${description}`.toLowerCase();
+            
+            // AI Category Detection
+            let categoryScores = {};
+            for (const [category, keywords] of Object.entries(aiCategoryPatterns)) {
+                categoryScores[category] = 0;
+                keywords.forEach(keyword => {
+                    if (text.includes(keyword)) {
+                        categoryScores[category]++;
+                    }
+                });
+            }
+            
+            // Find best category
+            let bestCategory = 'other';
+            let bestScore = 0;
+            for (const [category, score] of Object.entries(categoryScores)) {
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestCategory = category;
+                }
+            }
+            
+            // AI Priority Detection
+            let priorityScore = { high: 0, medium: 0, low: 0 };
+            for (const [priority, keywords] of Object.entries(aiPriorityPatterns)) {
+                keywords.forEach(keyword => {
+                    if (text.includes(keyword)) {
+                        priorityScore[priority]++;
+                    }
+                });
+            }
+            
+            let detectedPriority = 'medium';
+            if (priorityScore.high > 0) {
+                detectedPriority = 'high';
+            } else if (priorityScore.low > priorityScore.medium) {
+                detectedPriority = 'low';
+            }
+            
+            return {
+                category: bestCategory,
+                priority: detectedPriority,
+                confidence: bestScore > 0 ? 'High' : 'Medium'
+            };
+        }
+
+        function showAISuggestions(aiResult) {
+            // Auto-select category
+            let categoryCard = null;
+            
+            // Handle "Other" category
+            if (aiResult.category.startsWith('other:')) {
+                const otherText = aiResult.category.replace('other: ', '');
+                document.getElementById('categoryDropdown').value = 'other';
+                document.getElementById('otherCategorySpec').style.display = 'block';
+                document.getElementById('otherCategoryText').value = otherText;
+                document.getElementById('category').value = aiResult.category;
+            } else {
+                categoryCard = document.querySelector(`[data-category="${aiResult.category}"]`);
+                if (categoryCard) {
+                    document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+                    document.getElementById('categoryDropdown').value = aiResult.category;
+                    document.getElementById('otherCategorySpec').style.display = 'none';
+                    
+                    categoryCard.classList.add('selected');
+                    document.getElementById('category').value = aiResult.category;
+                    
+                    // Add AI badge
+                    categoryCard.innerHTML += `
+                        <div class="ai-badge">
+                            <i class="fas fa-robot"></i> AI Detected
+                        </div>
+                    `;
+                }
+            }
+            
+            // Auto-select priority
+            const priorityOption = document.querySelector(`[data-priority="${aiResult.priority}"]`);
+            if (priorityOption) {
+                document.querySelectorAll('.priority-option').forEach(p => p.classList.remove('selected'));
+                priorityOption.classList.add('selected');
+                document.getElementById('priority').value = aiResult.priority;
+            }
+            
+            // Show AI suggestion message
+            showAIMessage(aiResult);
+        }
+
+        function showAIMessage(aiResult) {
+            const aiMessage = document.createElement('div');
+            aiMessage.className = 'ai-suggestion-message';
+            aiMessage.innerHTML = `
+                <div class="ai-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="ai-content">
+                    <strong>AI Analysis Complete!</strong><br>
+                    <small>Category: <strong>${aiResult.category}</strong> | Priority: <strong>${aiResult.priority}</strong></small>
+                </div>
+                <button class="ai-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Find the description field and insert after it
+            const descriptionField = document.getElementById('description');
+            if (descriptionField) {
+                const parent = descriptionField.closest('.form-floating-modern') || descriptionField.parentElement;
+                if (parent) {
+                    parent.insertAdjacentElement('afterend', aiMessage);
+                } else {
+                    // Fallback: append to form
+                    const form = document.getElementById('submitConcernForm');
+                    if (form) {
+                        form.appendChild(aiMessage);
+                    }
+                }
+            } else {
+                // Fallback: append to form
+                const form = document.getElementById('submitConcernForm');
+                if (form) {
+                    form.appendChild(aiMessage);
+                }
+            }
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (aiMessage.parentElement) {
+                    aiMessage.remove();
+                }
+            }, 5000);
+        }
+
+        // Category selection
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+                document.getElementById('categoryDropdown').value = '';
+                document.getElementById('otherCategorySpec').style.display = 'none';
+                
+                this.classList.add('selected');
+                document.getElementById('category').value = this.dataset.category;
+            });
+        });
+
+        // Dropdown category selection
+        document.getElementById('categoryDropdown').addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            // Clear card selections
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+            
+            if (selectedValue === 'other') {
+                // Show "Other" specification field
+                document.getElementById('otherCategorySpec').style.display = 'block';
+                document.getElementById('category').value = 'other';
+                document.getElementById('otherCategoryText').focus();
+            } else {
+                // Hide "Other" specification field
+                document.getElementById('otherCategorySpec').style.display = 'none';
+                document.getElementById('category').value = selectedValue;
+                
+                // Highlight corresponding card
+                const correspondingCard = document.querySelector(`[data-category="${selectedValue}"]`);
+                if (correspondingCard) {
+                    correspondingCard.classList.add('selected');
+                }
+            }
+        });
+
+        // Handle "Other" category text input
+        document.getElementById('otherCategoryText').addEventListener('input', function() {
+            const otherText = this.value.trim();
+            if (otherText) {
+                document.getElementById('category').value = `other: ${otherText}`;
+            } else {
+                document.getElementById('category').value = 'other';
+            }
+        });
+
+        // Common concerns dropdown handler
+        document.getElementById('commonConcerns').addEventListener('change', function() {
+            const selectedConcern = this.value;
+            
+            if (selectedConcern) {
+                // Auto-populate title and description
+                document.getElementById('title').value = selectedConcern;
+                
+                // Generate detailed description based on the concern
+                const descriptions = {
+                    'WiFi slow in library': 'The WiFi connection in the main library is extremely slow, making it difficult to study and access online resources. This has been an ongoing issue for several weeks.',
+                    'Can\'t connect to campus WiFi': 'I am unable to connect to the campus WiFi network. I have tried multiple devices and restarted my computer, but the connection keeps failing.',
+                    'Internet keeps disconnecting': 'My internet connection keeps disconnecting every few minutes, making it impossible to complete online assignments or attend virtual classes.',
+                    'No WiFi in dormitory': 'There is no WiFi signal in my dormitory building, making it difficult to access online course materials and complete homework.',
+                    'Can\'t login to student portal': 'I am unable to login to the student portal. I have tried resetting my password but still cannot access my account.',
+                    'Forgot password': 'I have forgotten my password for the student portal and need help resetting it to access my grades and course information.',
+                    'Portal access denied': 'When I try to login to the student portal, I get an "access denied" error message even though I am using the correct credentials.',
+                    'Grades not showing': 'My grades for the current semester are not showing up in the student portal, even though grades have been posted.',
+                    'Room booking system not working': 'The online room booking system is not working. I cannot book study rooms or classrooms for group meetings.',
+                    'Classroom too hot/cold': 'The temperature in several classrooms is either too hot or too cold, making it difficult to concentrate during lectures.',
+                    'Broken equipment in lab': 'Several pieces of equipment in the science lab are broken or not functioning properly, affecting our ability to complete lab assignments.',
+                    'Lighting issues in study area': 'The lighting in the main study area is poor, with several flickering or burned-out lights making it difficult to read.',
+                    'Computer lab computers slow': 'The computers in the main computer lab are very slow and take a long time to start up or run basic programs.',
+                    'Software not installed': 'Required software for my courses is not installed on the lab computers, preventing me from completing assignments.',
+                    'Printer not working': 'The printers in the library and computer lab are not working, preventing students from printing assignments and course materials.',
+                    'Can\'t access course materials': 'I cannot access course materials through the online learning platform. Some files are missing or will not open.',
+                    'Missing grade in course': 'One of my grades is missing from my transcript in the student portal. I completed the course but the grade is not showing.',
+                    'Schedule conflict': 'I have a schedule conflict with two of my courses that are scheduled at the same time this semester.',
+                    'Need course add/drop': 'I need to add or drop a course but the deadline has passed or the system is not allowing me to make changes.',
+                    'Exam scheduling issue': 'Two of my final exams are scheduled at the same time, creating a conflict that needs to be resolved.',
+                    'Scholarship application issue': 'I am having trouble with my scholarship application. The system will not accept my documents or there is an error in the application.',
+                    'Tuition payment problem': 'There is an issue with my tuition payment. The system shows I still owe money even though I have already paid.',
+                    'Financial aid delay': 'My financial aid has been delayed and I need assistance with paying for tuition and expenses until it arrives.',
+                    'Work-study payment issue': 'I have not received my work-study payment for the past two weeks and need to know when I will be paid.',
+                    'Need counseling appointment': 'I need to schedule an appointment with the counseling services but cannot find available times or the system is not working.',
+                    'Medical center wait time': 'The wait time at the medical center is extremely long. I waited over two hours for a simple check-up.',
+                    'Accessibility accommodation': 'I need accessibility accommodations for my classes but have not received the support I requested.',
+                    'Mental health support': 'I need mental health support services but am unsure how to access them or what resources are available.'
+                };
+                
+                document.getElementById('description').value = descriptions[selectedConcern] || `Please help me with: ${selectedConcern}. This issue is affecting my ability to study and complete my coursework effectively.`;
+                
+                // Trigger AI categorization
+                triggerAICategorization();
+            }
+        });
+
+        // Priority selection
+        document.querySelectorAll('.priority-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.priority-option').forEach(p => p.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('priority').value = this.dataset.priority;
+                console.log('Priority set to:', this.dataset.priority);
+            });
+        });
+
+        // Set default priority to medium
+        document.addEventListener('DOMContentLoaded', function() {
+            const mediumOption = document.querySelector('[data-priority="medium"]');
+            if (mediumOption) {
+                mediumOption.click();
+            }
+        });
+
+        // AI Auto-Categorization
+        let aiTimeout;
+        const descriptionField = document.getElementById('description');
+        const titleField = document.getElementById('title');
+
+        function triggerAICategorization() {
+            clearTimeout(aiTimeout);
+            
+            const title = titleField.value.trim();
+            const description = descriptionField.value.trim();
+            
+            if (description.length > 20 || title.length > 5) {
+                aiTimeout = setTimeout(() => {
+                    const aiResult = aiCategorizeConcern(description, title);
+                    
+                    // Only show AI suggestions if category is not already selected
+                    if (!document.getElementById('category').value) {
+                        showAISuggestions(aiResult);
+                    }
+                }, 1000); // Wait 1 second after typing stops
+            }
+        }
+
+        titleField.addEventListener('input', triggerAICategorization);
+        descriptionField.addEventListener('input', triggerAICategorization);
+
+        // AI Smart Reply Generator
+        function generateSmartReply(category, priority, description) {
+            console.log('Generating smart reply for:', { category, priority, description });
+            
+            const smartReplies = {
+                'it': {
+                    'high': [
+                        'This appears to be a critical IT issue. IT support has been notified and will respond within 30 minutes.',
+                        'Immediate IT support has been dispatched. Please ensure your safety while waiting for assistance.'
+                    ],
+                    'medium': [
+                        'IT support will review your concern within 2 hours. Try restarting your device if possible.',
+                        'Your IT concern has been logged. A technician will contact you within 24 hours.'
+                    ],
+                    'low': [
+                        'For common IT issues, try restarting your device or checking our IT help portal first.',
+                        'IT support will address this during regular business hours. Check the knowledge base for quick solutions.'
+                    ]
+                },
+                'facilities': {
+                    'high': [
+                        'Facilities maintenance has been alerted for immediate response. Please avoid the area if unsafe.',
+                        'Emergency maintenance has been dispatched. Your safety is our priority.'
+                    ],
+                    'medium': [
+                        'Facilities will address this issue within 24 hours. Thank you for your patience.',
+                        'Your maintenance request has been logged and scheduled for review.'
+                    ],
+                    'low': [
+                        'This will be addressed during routine maintenance. Thank you for bringing this to our attention.',
+                        'Facilities will review this during the next maintenance cycle.'
+                    ]
+                },
+                'academic': {
+                    'high': [
+                        'Academic affairs will review this urgent matter immediately. A counselor will contact you soon.',
+                        'This academic concern requires immediate attention. Department head has been notified.'
+                    ],
+                    'medium': [
+                        'Your academic concern has been forwarded to the appropriate department for review.',
+                        'Academic advisor will contact you within 2 business days to discuss this matter.'
+                    ],
+                    'low': [
+                        'This academic suggestion will be reviewed by the curriculum committee.',
+                        'Thank you for your academic feedback. It will be considered in future planning.'
+                    ]
+                },
+                'financial': {
+                    'high': [
+                        'Financial aid office will review this urgent matter immediately. Please check your email for updates.',
+                        'This financial concern requires immediate attention. Student accounts has been notified.'
+                    ],
+                    'medium': [
+                        'Financial services will review your concern within 2 business days.',
+                        'Your financial inquiry has been logged and will be processed in order received.'
+                    ],
+                    'low': [
+                        'For general financial questions, please check our student finance portal first.',
+                        'This will be reviewed during the next billing cycle. Thank you for your patience.'
+                    ]
+                },
+                'welfare': {
+                    'high': [
+                        'Student support services will contact you immediately. Your wellbeing is our priority.',
+                        'Counseling services are available 24/7. Please call the student support hotline if needed.'
+                    ],
+                    'medium': [
+                        'Student support will review your concern and contact you within 24 hours.',
+                        'Your welfare concern has been forwarded to the appropriate support team.'
+                    ],
+                    'low': [
+                        'Thank you for sharing this feedback. Student services will review your suggestions.',
+                        'Your wellness suggestion will be considered in our continuous improvement efforts.'
+                    ]
+                }
+            };
+
+            // Handle "Other" categories
+            let cleanCategory = category;
+            if (category.startsWith('other:')) {
+                cleanCategory = 'other';
+            }
+
+            // Get smart reply or use default
+            let smartReply = '';
+            try {
+                if (smartReplies[cleanCategory] && smartReplies[cleanCategory][priority]) {
+                    const replies = smartReplies[cleanCategory][priority];
+                    smartReply = replies[Math.floor(Math.random() * replies.length)];
+                } else {
+                    smartReply = 'Your concern has been received and will be reviewed by the appropriate department.';
+                }
+            } catch (error) {
+                console.error('Error generating smart reply:', error);
+                smartReply = 'Your concern has been received and will be reviewed by the appropriate department.';
+            }
+            
+            console.log('Smart reply generated:', smartReply);
+            return smartReply;
+        }
+
+        // File handling
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            const fileInfo = document.getElementById('fileInfo');
+            const filePreview = document.getElementById('filePreview');
+            const attachmentArea = document.querySelector('.attachment-area');
+            
+            if (file) {
+                // Update file info
+                fileInfo.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-file me-2"></i>
+                        <strong>Selected file:</strong> ${file.name}
+                        <br>
+                        <strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB
+                        <br>
+                        <strong>Type:</strong> ${file.type}
+                    </div>
+                `;
+                
+                // Update attachment area
+                attachmentArea.classList.add('has-file');
+                
+                // Show preview for images
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        filePreview.innerHTML = `
+                            <img src="${e.target.result}" class="img-fluid rounded" alt="Preview" style="max-height: 200px;">
+                        `;
+                        filePreview.classList.add('show');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    filePreview.innerHTML = `
+                        <div class="alert alert-secondary">
+                            <i class="fas fa-file me-2"></i>
+                            File preview not available for this file type
+                        </div>
+                    `;
+                    filePreview.classList.add('show');
+                }
+            } else {
+                fileInfo.innerHTML = '<i class="fas fa-info-circle me-1"></i> No file selected';
+                attachmentArea.classList.remove('has-file');
+                filePreview.classList.remove('show');
+            }
+        }
+
+        // Form submission
+        document.getElementById('submitConcernForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const category = document.getElementById('category').value;
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const priority = document.getElementById('priority').value;
+            const attachmentInput = document.getElementById('attachment');
+            const anonymous = document.getElementById('anonymous').checked;
+            
+            // Debug logging
+            console.log('Form submission data:', {
+                category,
+                title,
+                description,
+                priority,
+                anonymous
+            });
+            
+            // Enhanced validation
+            if (!category || category.trim() === '') {
+                alert('Please select a category for your concern.');
+                return;
+            }
+            
+            if (!title || title.trim() === '') {
+                alert('Please enter a title for your concern.');
+                return;
+            }
+            
+            if (!description || description.trim() === '') {
+                alert('Please enter a description for your concern.');
+                return;
+            }
+            
+            if (!priority || priority.trim() === '') {
+                alert('Please select a priority level for your concern.');
+                return;
+            }
+            
+            // Generate AI smart reply
+            const smartReply = generateSmartReply(category, priority, description);
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-robot"></i> AI Processing...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Simulate API call with AI processing
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Save concern to localStorage for dashboard display
+                const concernData = {
+                    id: Date.now(), // Use timestamp as ID
+                    title: title,
+                    description: description,
+                    category: category,
+                    priority: priority,
+                    status: 'Submitted',
+                    date: 'Just now',
+                    anonymous: anonymous,
+                    smartReply: smartReply,
+                    submittedAt: new Date().toISOString(),
+                    studentId: currentUser?.id || 'student1',
+                    studentName: currentUser?.name || 'Student'
+                };
+                
+                // Get existing concerns or create empty array
+                let existingConcerns = JSON.parse(localStorage.getItem('submittedConcerns') || '[]');
+                existingConcerns.unshift(concernData); // Add to beginning
+                localStorage.setItem('submittedConcerns', JSON.stringify(existingConcerns));
+                
+                // URGENT ALERT: Send alert to admin if high priority
+                if (priority === 'high') {
+                    const urgentAlert = {
+                        id: Date.now(),
+                        type: 'urgent_alert',
+                        concernId: concernData.id,
+                        title: title,
+                        description: description,
+                        category: category,
+                        priority: priority,
+                        studentName: concernData.studentName,
+                        submittedAt: concernData.submittedAt,
+                        alertMessage: `🚨 URGENT: High priority concern detected - ${title}`,
+                        detectedBy: 'AI Priority Detection System'
+                    };
+                    
+                    // Save urgent alert
+                    let urgentAlerts = JSON.parse(localStorage.getItem('urgentAlerts') || '[]');
+                    urgentAlerts.unshift(urgentAlert);
+                    localStorage.setItem('urgentAlerts', JSON.stringify(urgentAlerts));
+                    
+                    console.log('🚨 URGENT ALERT SENT TO ADMIN:', urgentAlert);
+                    
+                    // Show immediate warning to student
+                    const warningDiv = document.createElement('div');
+                    warningDiv.className = 'urgent-warning';
+                    warningDiv.innerHTML = `
+                        <div class="urgent-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="urgent-content">
+                            <h4>🚨 URGENT CONCERN DETECTED</h4>
+                            <p>AI has detected this as a high-priority safety concern.</p>
+                            <p><strong>Administrators have been immediately notified.</strong></p>
+                            <p>If this is a life-threatening emergency, call campus security immediately.</p>
+                        </div>
+                    `;
+                    
+                    // Insert warning before success message
+                    const formContainer = document.querySelector('.concern-form');
+                    if (formContainer) {
+                        formContainer.innerHTML = '';
+                        formContainer.appendChild(warningDiv);
+                    }
+                }
+                
+                console.log('Concern saved to localStorage:', concernData);
+                
+                // Simulate successful submission
+                const success = true;
+                
+                if (success) {
+                    // Show success with AI suggestion
+                    try {
+                        showSuccessMessage(smartReply);
+                        
+                        // Reset form after delay
+                        setTimeout(() => {
+                            submitAnother();
+                        }, 3000);
+                    } catch (successError) {
+                        console.error('Error showing success message:', successError);
+                        // Fallback to simple alert
+                        alert('Concern submitted successfully! ' + smartReply);
+                        setTimeout(() => {
+                            submitAnother();
+                        }, 2000);
+                    }
+                } else {
+                    throw new Error('Failed to submit concern');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to submit concern. Please try again.');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showSuccessMessage(smartReply) {
+            try {
+                // Try multiple selectors to find the form container
+                let formContainer = document.querySelector('.concern-form');
+                if (!formContainer) {
+                    formContainer = document.querySelector('form');
+                }
+                if (!formContainer) {
+                    formContainer = document.getElementById('submitConcernForm');
+                }
+                if (!formContainer) {
+                    console.error('No form container found');
+                    // Fallback to simple alert
+                    alert('Concern submitted successfully! ' + (smartReply || 'Your concern has been received.'));
+                    return;
+                }
+                
+                const successDiv = document.createElement('div');
+                successDiv.className = 'ai-success-message';
+                successDiv.innerHTML = `
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="success-content">
+                        <h4><i class="fas fa-robot"></i> AI-Enhanced Submission Complete!</h4>
+                        <p>Your concern has been submitted and processed by our AI system.</p>
+                        <div class="smart-reply-box">
+                            <strong><i class="fas fa-lightbulb"></i> AI Suggested Solution:</strong>
+                            <p>${smartReply || 'Your concern has been received and will be reviewed.'}</p>
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn-modern btn-primary-modern me-2" onclick="viewDashboard()">
+                                <i class="fas fa-tachometer-alt me-2"></i>View Dashboard
+                            </button>
+                            <button type="button" class="btn-modern btn-secondary-modern" onclick="submitAnother()">
+                                <i class="fas fa-plus me-2"></i>Submit Another
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Replace form content with success message
+                formContainer.innerHTML = '';
+                formContainer.appendChild(successDiv);
+                
+                console.log('Success message displayed');
+            } catch (error) {
+                console.error('Error in showSuccessMessage:', error);
+                // Fallback to simple alert
+                alert('Concern submitted successfully! ' + (smartReply || 'Your concern has been received.'));
+            }
+        }
+
+        function submitAnother() {
+            // Reset form
+            document.getElementById('submitConcernForm').reset();
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.priority-option').forEach(p => p.classList.remove('selected'));
+            document.querySelector('.attachment-area').classList.remove('has-file');
+            document.getElementById('filePreview').classList.remove('show');
+            document.getElementById('fileInfo').innerHTML = '<i class="fas fa-info-circle me-1"></i> No file selected';
+            
+            // Reload the form
+            location.reload();
+        }
+
+        function viewDashboard() {
+            window.location.href = 'student-dashboard.html';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            currentUser = checkAuth();
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+            }
+        });
+    </script>
+</body>
+</html>
