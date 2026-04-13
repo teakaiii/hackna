@@ -1,9 +1,21 @@
 # InfinityFree Node.js Deployment
 Options -Indexes
 
-# Redirect all requests to the Node.js application
-DirectoryIndex disabled
+# Set default index file
+DirectoryIndex login.html index.html index.php
+
+# Redirect root to login page
 RewriteEngine On
+RewriteRule ^$ login.html [L]
+
+# If file/directory doesn't exist, route to Node.js app
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
+
+# Serve static files directly, route API to Node.js
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
